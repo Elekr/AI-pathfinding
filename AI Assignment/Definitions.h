@@ -9,8 +9,19 @@
 #include <vector>
 #include <deque>
 #include <memory>
+#include <iostream>
+#include <algorithm>
+#include <fstream>
+#include <string>
 
 using namespace std;
+
+const string MAP = "Map.txt";
+const string COORDS = "coords.txt";
+const string WATER = "blue.jpg";
+const string WOOD = "green.jpg";
+const string CLEAR = "bottom.jpg";
+const string WALL = "purple.jpg";
 
 // Represents a node in the search tree.-
 struct SNode //Declare a deque list of these for the open and closed lists
@@ -35,3 +46,4 @@ enum ETerrainCost
 
 // Maps of any size are implemented as 2D vectors
 using TerrainMap = vector<vector<ETerrainCost>>;
+

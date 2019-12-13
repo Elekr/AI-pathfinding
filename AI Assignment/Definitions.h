@@ -18,16 +18,17 @@ using namespace std;
 
 const string MAP = "Map.txt";
 const string COORDS = "coords.txt";
-const string WATER = "blue.jpg";
-const string WOOD = "green.jpg";
-const string CLEAR = "bottom.jpg";
-const string WALL = "purple.jpg";
+const string WATER = "blue.png";
+const string WOOD = "green.png";
+const string CLEAR = "grey.png";
+const string WALL = "purple.png";
 
 // Represents a node in the search tree.-
 struct SNode //Declare a deque list of these for the open and closed lists
 {
   int x;            // x coordinate
   int y;            // y coordinate
+  int cost;			// cost to move to this node
   int score;        // used in more complex algorithms
   SNode* parent = 0; // note use of raw pointer here
 };

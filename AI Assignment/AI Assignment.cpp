@@ -4,65 +4,6 @@
 #include "Definitions.h"
 #include "Search.h"
 #include "SearchFactory.h"
-#include "SearchNoStar.h"
-
-NodeList openList;
-NodeList closedList;
-NodeList path;
-
-void AddNode(deque<unique_ptr<SNode>>& myList, int xValue, int yValue, int nodeCost)
-{
-	unique_ptr <SNode> tmpNode(new SNode);
-	tmpNode->x = xValue;
-	tmpNode->y = yValue;
-	tmpNode->cost = nodeCost;
-	myList.push_back(move(tmpNode));
-}
-
-void Display(deque<unique_ptr<SNode>>& myList)
-{
-	for (auto it = myList.begin(); it != myList.end(); ++it)
-	{
-		cout << (*it)->x << " " << (*it)->y << endl;
-	}
-	cout << endl;
-	//for (auto& elt : myList)
-	//{
-	//	cout << elt->x << " " << elt->y << endl;
-	//}
-}
-
-void Search(deque<unique_ptr<SNode>>& myList, int xValue, int yValue)
-{
-	for (auto it = myList.begin(); it != myList.end(); ++it)
-	{
-		if (xValue == (*it)->x && yValue == (*it)->y)
-		{
-			cout << "node exists" << endl;
-		}
-	}
-}
-
-void MoveNodes(deque<unique_ptr<SNode>>& myList1, deque<unique_ptr<SNode>>& myList2)
-{
-	for (auto it = myList1.begin(); it != myList1.end(); ++it)
-	{
-		myList2.push_back(move((*it)));
-	}
-}
-
-void Raw(SNode* t)
-{
-	cout << "Raw output " << t->x << " " << t->y << endl << endl;
-}
-
-unique_ptr<SNode> Transfer(unique_ptr <SNode> t)
-{
-	cout << "Node current values " << t->x << " " << t->y << endl;
-	t->x = 1;
-	t->y = 2;
-	return std::move(t); //moves ownership back to the passed node so that it is out of scope
-}
 
 TerrainMap SetMap(string userChoice, TerrainMap &map)
 {
@@ -84,7 +25,8 @@ TerrainMap SetMap(string userChoice, TerrainMap &map)
 		vector<ETerrainCost> row;
 		//TODO get the starting and goal node locations 
 		cout << "arrayX: " << arrayX << " arrayY: " << arrayY << endl; //Get the size of the map 
-		//TODO 
+																	   //TODO 
+		vector<vector<ETerrainCost>>::iterator ptr;
 		for (int i = 0; i < arrayY; i++)
 		{
 			for (int j = 0; j < arrayX; j++)
@@ -116,8 +58,11 @@ TerrainMap SetMap(string userChoice, TerrainMap &map)
 			cout << endl;
 		}
 
+		
+
 		cout << endl;
 	}
+	reverse(map.begin(), map.end());
 	return map;
 	infile.close();
 }
@@ -135,23 +80,13 @@ void MapCoordinates(string userChoice, unique_ptr<SNode>& start, unique_ptr<SNod
 	}
 	else
 	{
-		int startX;
-		int startY;
-		int goalX;
-		int goalY;
-		infile >> startX >> startY >> goalX >> goalY;
-		start->x = startX;
-		start->y = startY;
-		goal->x = goalX;
-		goal->y = goalY;
+		infile >> start->x >> start->y >> goal->x >> goal->y;
 	}
 	infile.close();
 }
 
 
 using namespace tle;
-
-
 
 void main()
 {
@@ -164,22 +99,16 @@ void main()
 
 	/**** Set up your scene here ****/
 
+	//**** PATHFINDING ****//
 	TerrainMap currentMap;
 	unique_ptr<SNode> start(new SNode);
 	unique_ptr<SNode> goal(new SNode);
+	NodeList path;
 
-	ICamera* myCamera;
-	myCamera = myEngine->CreateCamera(kFPS, 20, -20, -100);
-	
-	IModel* quad;
-	IMesh* quadMesh = myEngine->LoadMesh("quad.x");
+	SetMap("d", currentMap); // USER INPUT FOR SETTING MAP
+	MapCoordinates("d", start, goal); // MAKE PART OF SET MAP?
 
-	SetMap("d", currentMap);
-	MapCoordinates("d", start, goal);
-	openList.push_back(move(start)); // OPEN LIST HAS THE STARTING NODE  SEARCH EACH NODE
-	Display(openList);
-
-	for (int i = 0; i < 10; i++)
+	ISearch* PathFinder = NewSearch(BreadthFirst);	for (int i = 0; i < 10; i++)
 	{
 		for (int j = 0; j < 10; j++)
 		{
@@ -187,6 +116,16 @@ void main()
 		}
 		cout << endl;
 	}
+	cout << currentMap[6][2] << endl;	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
+
+
+
+	//**** TL ENGINE ****//
+	ICamera* myCamera;
+	myCamera = myEngine->CreateCamera(kFPS, 50, 50, -150); //half of max X, half of max Y, -100
+	
+	IModel* quad;
+	IMesh* quadMesh = myEngine->LoadMesh("quad.x"); //Model set up for the tiles in the maze
 
 	for (int i = 0; i < 10; i++) //TODO change to iterator to support dynamic map size
 	{
@@ -195,19 +134,19 @@ void main()
 			switch (currentMap[i][j])
 			{
 			case(Wall):
-				quad = quadMesh->CreateModel(j*10, i*-10, 0);
+				quad = quadMesh->CreateModel(j*10, i*10, 0);
 				quad->SetSkin(WALL);
 				break;
 			case(Clear):
-				quad = quadMesh->CreateModel(j*10, i*-10, 0);
+				quad = quadMesh->CreateModel(j*10, i*10, 0);
 				quad->SetSkin(CLEAR);
 				break;
 			case(Water):
-				quad = quadMesh->CreateModel(j * 10, i * -10, 0);
+				quad = quadMesh->CreateModel(j * 10, i * 10, 0);
 				quad->SetSkin(WATER);
 				break;
 			case(Wood):
-				quad = quadMesh->CreateModel(j * 10, i * -10, 0);
+				quad = quadMesh->CreateModel(j * 10, i * 10, 0);
 				quad->SetSkin(WOOD);
 				break;
 			}

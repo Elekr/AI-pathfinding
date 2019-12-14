@@ -126,17 +126,18 @@ copy "C:\ProgramData\TL-Engine\3rd Party\TL-Xtreme\shader\*.*" "$(OutDir)" &gt; 
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI Assignment.cpp" />
+    <ClCompile Include="SearchBreadthFirst.cpp" />
     <ClCompile Include="SearchFactory.cpp" />
-    <ClCompile Include="SearchNoStar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SearchBreadthFirst.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="Search.h" />
     <ClInclude Include="SearchFactory.h" />
-    <ClInclude Include="SearchNoStar.h" />
+    <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

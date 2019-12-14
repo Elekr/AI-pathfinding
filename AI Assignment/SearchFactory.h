@@ -11,13 +11,11 @@
 // List of implemented seach algorithms
 enum ESearchType
 {
-  // BreadthFirst,
-  // Dijkstra,
-  // AStar,
-  
-  /* TODO - Add type elements for each implemented search */
+	// Dijkstra,
 
-  NoStar // Not a real algorithm - remove when ready! 
+	BreadthFirst,
+	AStar,
+
 };
 
 // Factory function to create CSearchXXX object where XXX is the given search type

@@ -4,12 +4,11 @@
 
 using namespace std;
 
-void AddNode(deque<unique_ptr<SNode>>& myList, int xValue, int yValue, int nodeCost, SNode* current)
+void AddNode(deque<unique_ptr<SNode>>& myList, int xValue, int yValue, SNode* current)
 {
 	unique_ptr <SNode> tmpNode(new SNode);
 	tmpNode->x = xValue;
 	tmpNode->y = yValue;
-	tmpNode->cost = nodeCost;
 	tmpNode->parent = current;
 	myList.push_back(move(tmpNode));
 }

@@ -3,7 +3,6 @@
 //
 // Type definitions to support path finding 
 //
-
 #pragma once
 
 #include <vector>
@@ -13,7 +12,6 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
-
 
 using namespace std;
 
@@ -29,7 +27,6 @@ struct SNode //Declare a deque list of these for the open and closed lists
 {
   int x;            // x coordinate
   int y;            // y coordinate
-  int cost;			// cost to move to this node
   int score;        // used in more complex algorithms
   SNode* parent = 0; // note use of raw pointer here
 };
@@ -48,4 +45,3 @@ enum ETerrainCost
 
 // Maps of any size are implemented as 2D vectors
 using TerrainMap = vector<vector<ETerrainCost>>;
-

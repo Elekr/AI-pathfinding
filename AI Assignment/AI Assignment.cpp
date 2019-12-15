@@ -4,6 +4,9 @@
 #include "Definitions.h"
 #include "Search.h"
 #include "SearchFactory.h"
+using namespace tle;
+
+using ModelMap = vector<vector<IModel*>>;
 
 TerrainMap SetMap(string userChoice, TerrainMap &map)
 {
@@ -85,8 +88,38 @@ void MapCoordinates(string userChoice, unique_ptr<SNode>& start, unique_ptr<SNod
 	infile.close();
 }
 
-
-using namespace tle;
+void TLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap tilesMap)
+{
+	vector<IModel*> row;
+	IMesh* quadMesh = myEngine->LoadMesh("quad.x"); //Model set up for the tiles in the maze
+	for (int i = 0; i < 10; i++) //TODO change to iterator to support dynamic map size
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			switch (currentMap[i][j])
+			{
+			case(Wall):
+				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
+				row[j]->SetSkin(WALL);
+				break;
+			case(Clear):
+				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
+				row[j]->SetSkin(CLEAR);
+				break;
+			case(Water):
+				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
+				row[j]->SetSkin(WATER);
+				break;
+			case(Wood):
+				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
+				row[j]->SetSkin(WOOD);
+				break;
+			}
+		}
+		tilesMap.push_back(row);
+		row.clear();
+	}
+}
 
 void main()
 {
@@ -108,50 +141,27 @@ void main()
 	SetMap("d", currentMap); // USER INPUT FOR SETTING MAP
 	MapCoordinates("d", start, goal); // MAKE PART OF SET MAP?
 
-	ISearch* PathFinder = NewSearch(BreadthFirst);	for (int i = 0; i < 10; i++)
+	ISearch* PathFinder = NewSearch(BreadthFirst);	for (int i = 0; i < 10; i++) //Output the enum vector
 	{
 		for (int j = 0; j < 10; j++)
 		{
 			cout << currentMap[i][j];
 		}
 		cout << endl;
+	}	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
+
+	for (auto it = path.begin(); it != path.end(); ++it) //Outputs the path
+	{
+		cout << (*it)->x << " " << (*it)->y << endl;
 	}
-	cout << currentMap[6][2] << endl;	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
-
-
+	cout << endl;
 
 	//**** TL ENGINE ****//
+	ModelMap tilesMap;
 	ICamera* myCamera;
-	myCamera = myEngine->CreateCamera(kFPS, 50, 50, -150); //half of max X, half of max Y, -100
-	
-	IModel* quad;
-	IMesh* quadMesh = myEngine->LoadMesh("quad.x"); //Model set up for the tiles in the maze
+	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -100
+	TLMap(myEngine, currentMap, tilesMap);
 
-	for (int i = 0; i < 10; i++) //TODO change to iterator to support dynamic map size
-	{
-		for (int j = 0; j < 10; j++)
-		{
-			switch (currentMap[i][j])
-			{
-			case(Wall):
-				quad = quadMesh->CreateModel(j*10, i*10, 0);
-				quad->SetSkin(WALL);
-				break;
-			case(Clear):
-				quad = quadMesh->CreateModel(j*10, i*10, 0);
-				quad->SetSkin(CLEAR);
-				break;
-			case(Water):
-				quad = quadMesh->CreateModel(j * 10, i * 10, 0);
-				quad->SetSkin(WATER);
-				break;
-			case(Wood):
-				quad = quadMesh->CreateModel(j * 10, i * 10, 0);
-				quad->SetSkin(WOOD);
-				break;
-			}
-		}
-	}
 
 
 	// The main game loop, repeat until engine is stopped
@@ -161,7 +171,8 @@ void main()
 		myEngine->DrawScene();
 
 		/**** Update your scene each frame here ****/
-
+		//CHOOSE MAP
+		//CHOOSE ALGORITHM
 		if (myEngine->KeyHit(Key_Escape))
 		{
 			myEngine->Stop();

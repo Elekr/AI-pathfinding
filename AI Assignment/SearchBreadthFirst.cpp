@@ -3,55 +3,64 @@
 #include "SearchBreadthFirst.h"
 #include "Utilities.h"
 
-bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start, unique_ptr<SNode> goal, NodeList & path) //SEND OVER AN ARRAY OF MODELS TO UPDATE WHEN SHIT HAPPENS
+bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start, unique_ptr<SNode> goal, NodeList &path) //SEND OVER AN ARRAY OF MODELS TO UPDATE WHEN SHIT HAPPENS
 {
-	cout << "search function is being called" << endl;
-
 	NodeList openList;
 	NodeList closedList;
 	unique_ptr<SNode> current (new SNode);
-
+	SNode* prior = current.get();
+	SNode* path1;
 	openList.push_back(move(start)); //push initial state onto open list
+
 	while (!openList.empty()) // until goal state is found or openlist is empty
 	{
 		 current = move(openList.front()); // pop first element 
+		 prior = current.get();
 		 openList.pop_front();
 
-		 if (terrain[current->y + 1][current->x] != 0) //North node CHECK IF NULL BECAUSE OUT OF BOUNDS OF THE VECTOR WOULD BE NULL IF THERE'S NO WALLS
+		 if (terrain[current->y + 1][current->x] != 0 || terrain[current->y + 1][current->x] < 0) //North node CHECK IF NULL BECAUSE OUT OF BOUNDS OF THE VECTOR WOULD BE NULL IF THERE'S NO WALLS function
 		 {
 			 if ( !Search(closedList, current->x, current->y + 1)) 
 			 {
-				 AddNode(openList, current->x, current->y + 1, 0, current.get());
+				 AddNode(openList, current->x, current->y + 1, prior);
 			 }
 		 }
 
-		 if (terrain[current->y][current->x + 1] != 0) //East node
+		 if (terrain[current->y][current->x + 1] != 0 || terrain[current->y][current->x + 1] < 0) //East node
 		 {
 			 if (!Search(closedList, current->x + 1, current->y))
 			 {
-				AddNode(openList, current->x + 1, current->y, 0, current.get());
+				AddNode(openList, current->x + 1, current->y, prior);
 			 }
 		 }
 
-		 if (terrain[current->y - 1][current->x] != 0) //South node
+		 if (terrain[current->y - 1][current->x] != 0 || terrain[current->y - 1][current->x] < 0) //South node
 		 {
 			 if (!Search(closedList, current->x, current->y - 1))
 			 {
-				 AddNode(openList, current->x, current->y - 1, 0, current.get());
+				 AddNode(openList, current->x, current->y - 1, prior);
 			 }
 		 }
 
-		 if (terrain[current->y][current->x - 1] != 0) //West node
+		 if (terrain[current->y][current->x - 1] != 0 || terrain[current->y][current->x - 1] != NULL) //West node
 		 {
 			 if (!Search(closedList, current->x - 1, current->y))
 			 {
-				 AddNode(openList, current->x - 1, current->y, 0, current.get());
+				 AddNode(openList, current->x - 1, current->y, prior);
 			 }
 		 }
-		 cout << current->x << " " << current->y << endl;
+		 //cout << current->x << " " << current->y << endl;
 
 		 if (current->x == goal->x && current->y == goal->y)
 		 {
+			 path1 = current.get();
+			 while (path1 != 0)
+			 {
+				 AddNode(path, path1->x, path1->y, 0);
+				 //cout << path1->x << " " << path1->y << endl;
+				 path1 = path1->parent;
+			 }
+
 			 return true;
 		 }
 		 closedList.push_back(move(current));

@@ -1,9 +1,7 @@
-﻿  SearchBreadthFirst.cpp
-  AI Assignment.cpp
+﻿  AI Assignment.cpp
 d:\users\tcrosby\documents\github\ai-pathfinding\ai assignment\ai assignment.cpp(102): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
 d:\users\tcrosby\documents\github\ai-pathfinding\ai assignment\ai assignment.cpp(106): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
 d:\users\tcrosby\documents\github\ai-pathfinding\ai assignment\ai assignment.cpp(110): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
 d:\users\tcrosby\documents\github\ai-pathfinding\ai assignment\ai assignment.cpp(114): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
-  Generating Code...
   AI Assignment.vcxproj -> D:\Users\tcrosby\Documents\GitHub\AI-pathfinding\AI Assignment\\AI AssignmentDebug.exe
   AI Assignment.vcxproj -> D:\Users\tcrosby\Documents\GitHub\AI-pathfinding\AI Assignment\\AI Assignment.pdb (Full PDB)

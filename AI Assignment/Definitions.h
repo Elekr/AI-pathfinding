@@ -20,7 +20,8 @@ const string COORDS = "coords.txt";
 const string WATER = "blue.png";
 const string WOOD = "green.png";
 const string CLEAR = "grey.png";
-const string WALL = "purple.png";
+const string WALL = "black.png";
+const string PATH = "red.png";
 
 // Represents a node in the search tree.-
 struct SNode //Declare a deque list of these for the open and closed lists

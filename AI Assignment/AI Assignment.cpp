@@ -88,7 +88,7 @@ void MapCoordinates(string userChoice, unique_ptr<SNode>& start, unique_ptr<SNod
 	infile.close();
 }
 
-void TLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap tilesMap)
+void TLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
 {
 	vector<IModel*> row;
 	IMesh* quadMesh = myEngine->LoadMesh("quad.x"); //Model set up for the tiles in the maze
@@ -121,6 +121,17 @@ void TLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap tilesMap)
 	}
 }
 
+void DrawPath(ModelMap &tilesMap, NodeList &path)
+{
+	for (auto it = path.begin(); it != path.end(); ++it) //Outputs the path
+	{
+		
+		tilesMap[(*it)->y][(*it)->x]->SetSkin(PATH);
+	}
+	cout << endl;
+
+}
+
 void main()
 {
 	// Create a 3D engine (using TLX engine here) and open a window for it
@@ -138,21 +149,25 @@ void main()
 	unique_ptr<SNode> goal(new SNode);
 	NodeList path;
 
-	SetMap("d", currentMap); // USER INPUT FOR SETTING MAP
-	MapCoordinates("d", start, goal); // MAKE PART OF SET MAP?
+	SetMap("m", currentMap); // USER INPUT FOR SETTING MAP
+	MapCoordinates("m", start, goal); // MAKE PART OF SET MAP?
 
-	ISearch* PathFinder = NewSearch(BreadthFirst);	for (int i = 0; i < 10; i++) //Output the enum vector
+	ISearch* PathFinder = NewSearch(BreadthFirst);
+
+	for (int i = 0; i < 10; i++) //Output the enum vector
 	{
 		for (int j = 0; j < 10; j++)
 		{
 			cout << currentMap[i][j];
 		}
 		cout << endl;
-	}	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
+	}
+
+	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
 
 	for (auto it = path.begin(); it != path.end(); ++it) //Outputs the path
 	{
-		cout << (*it)->x << " " << (*it)->y << endl;
+		cout << (*it)->y << " " << (*it)->x << endl;
 	}
 	cout << endl;
 
@@ -162,7 +177,7 @@ void main()
 	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -100
 	TLMap(myEngine, currentMap, tilesMap);
 
-
+	DrawPath(tilesMap, path);
 
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())

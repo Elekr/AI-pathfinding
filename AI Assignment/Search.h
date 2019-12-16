@@ -26,6 +26,7 @@ public:
   // Constructs the path from start to goal for the given terrain
   // Pure Virtual function to be implemented in derived class.
   virtual bool FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique_ptr<SNode> goal, NodeList& path) = 0;
+  virtual bool FindPathRT(TerrainMap& terrain, unique_ptr<SNode> start, unique_ptr<SNode> goal, NodeList& path, ModelMap &map, I3DEngine* &myEngine) = 0;
 
   /* TODO - Only for high marks
      Add a pure virtual function declaration to perform one iteration of the path-finding loop.

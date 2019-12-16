@@ -5,6 +5,7 @@
 //
 #pragma once
 
+#include <TL-Engine.h>
 #include <vector>
 #include <deque>
 #include <memory>
@@ -14,6 +15,8 @@
 #include <string>
 
 using namespace std;
+using namespace tle;
+
 
 const string MAP = "Map.txt";
 const string COORDS = "coords.txt";
@@ -46,3 +49,5 @@ enum ETerrainCost
 
 // Maps of any size are implemented as 2D vectors
 using TerrainMap = vector<vector<ETerrainCost>>;
+
+using ModelMap = vector<vector<IModel*>>;

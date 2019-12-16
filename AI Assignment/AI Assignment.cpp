@@ -2,11 +2,9 @@
 
 #include <TL-Engine.h>	// TL-Engine include file and namespace
 #include "Definitions.h"
-#include "Search.h"
 #include "SearchFactory.h"
-using namespace tle;
 
-using ModelMap = vector<vector<IModel*>>;
+using namespace tle;
 
 TerrainMap SetMap(string userChoice, TerrainMap &map)
 {
@@ -27,7 +25,7 @@ TerrainMap SetMap(string userChoice, TerrainMap &map)
 		infile >> arrayX >> arrayY;
 		vector<ETerrainCost> row;
 		//TODO get the starting and goal node locations 
-		cout << "arrayX: " << arrayX << " arrayY: " << arrayY << endl; //Get the size of the map 
+		cout << "arrayX: " << arrayX << " arrayY: " << arrayY << endl << endl; //Get the size of the map 
 																	   //TODO 
 		vector<vector<ETerrainCost>>::iterator ptr;
 		for (int i = 0; i < arrayY; i++)
@@ -39,31 +37,22 @@ TerrainMap SetMap(string userChoice, TerrainMap &map)
 				switch (currentNumber)
 				{
 				case(Wall):
-					cout << "0";
 					row.push_back(Wall);
 					break;
 				case(Clear):
-					cout << "1";
 					row.push_back(Clear);
 					break;
 				case(Water):
-					cout << "2";
 					row.push_back(Water);
 					break;
 				case(Wood):
-					cout << "3";
 					row.push_back(Wood);
 					break;
 				}
 			}
 			map.push_back(row);
 			row.clear();
-			cout << endl;
 		}
-
-		
-
-		cout << endl;
 	}
 	reverse(map.begin(), map.end());
 	return map;
@@ -74,7 +63,7 @@ void MapCoordinates(string userChoice, unique_ptr<SNode>& start, unique_ptr<SNod
 {
 	string mapName = userChoice;
 	mapName.append(COORDS);
-	cout << "map file name: " << mapName << endl; //set the file names for the fstream to open
+	cout << "coords file name: " << mapName << endl << endl; //set the file names for the fstream to open
 
 	fstream infile;
 	infile.open(mapName); //Opens the file 
@@ -125,11 +114,35 @@ void DrawPath(ModelMap &tilesMap, NodeList &path)
 {
 	for (auto it = path.begin(); it != path.end(); ++it) //Outputs the path
 	{
-		
 		tilesMap[(*it)->y][(*it)->x]->SetSkin(PATH);
 	}
 	cout << endl;
 
+}
+
+void DisplayVector(TerrainMap currentMap)
+{
+	cout << "Vector output: " << endl;
+	for (int i = 0; i < 10; i++) //Output the enum vector
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			cout << currentMap[i][j];
+		}
+		cout << endl;
+	}
+
+	cout << endl;
+}
+
+void DisplayPath(NodeList &path)
+{
+	cout << "Path output: " << endl;
+	for (auto it = path.begin(); it != path.end(); ++it) //Outputs the path
+	{
+		cout << (*it)->y << " " << (*it)->x << endl;
+	}
+	cout << endl;
 }
 
 void main()
@@ -144,40 +157,34 @@ void main()
 	/**** Set up your scene here ****/
 
 	//**** PATHFINDING ****//
+	//SETUP
 	TerrainMap currentMap;
 	unique_ptr<SNode> start(new SNode);
 	unique_ptr<SNode> goal(new SNode);
 	NodeList path;
 
+	//LOAD
 	SetMap("m", currentMap); // USER INPUT FOR SETTING MAP
 	MapCoordinates("m", start, goal); // MAKE PART OF SET MAP?
+	DisplayVector(currentMap);
 
+	//SEARCH
 	ISearch* PathFinder = NewSearch(BreadthFirst);
 
-	for (int i = 0; i < 10; i++) //Output the enum vector
-	{
-		for (int j = 0; j < 10; j++)
-		{
-			cout << currentMap[i][j];
-		}
-		cout << endl;
-	}
+	//bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
 
-	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
-
-	for (auto it = path.begin(); it != path.end(); ++it) //Outputs the path
-	{
-		cout << (*it)->y << " " << (*it)->x << endl;
-	}
-	cout << endl;
+	DisplayPath(path);
 
 	//**** TL ENGINE ****//
+	IFont* myFont = myEngine->LoadFont("Comic Sans MS", 36); //WHY ISN'T THIS WORKING
+	myFont->Draw("Hello Again", 100, 300, kRed, kCentre);
 	ModelMap tilesMap;
 	ICamera* myCamera;
-	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -100
+	myCamera = myEngine->CreateCamera(kFPS, 50, 50, -150); //half of max X, half of max Y, -100
 	TLMap(myEngine, currentMap, tilesMap);
+	bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
+	//DrawPath(tilesMap, path);
 
-	DrawPath(tilesMap, path);
 
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())

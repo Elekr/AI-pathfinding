@@ -168,23 +168,24 @@ void main()
 	MapCoordinates("m", start, goal); // MAKE PART OF SET MAP?
 	DisplayVector(currentMap);
 
-	//SEARCH
+	//SEARCH FUNCTION
 	ISearch* PathFinder = NewSearch(BreadthFirst);
 
-	//bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
+	//bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path); // NOT REAL TIME
 
-	DisplayPath(path);
+	//DisplayPath(path);
 
 	//**** TL ENGINE ****//
-	IFont* myFont = myEngine->LoadFont("Comic Sans MS", 36); //WHY ISN'T THIS WORKING
-	myFont->Draw("Hello Again", 100, 300, kRed, kCentre);
+
+	
 	ModelMap tilesMap;
 	ICamera* myCamera;
-	myCamera = myEngine->CreateCamera(kFPS, 50, 50, -150); //half of max X, half of max Y, -100
+	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -150
 	TLMap(myEngine, currentMap, tilesMap);
-	bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
-	//DrawPath(tilesMap, path);
 
+	//PATHFINDING AND DRAWING PATH
+	bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
+	DrawPath(tilesMap, path);
 
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())
@@ -194,7 +195,10 @@ void main()
 
 		/**** Update your scene each frame here ****/
 		//CHOOSE MAP
-		//CHOOSE ALGORITHM
+		//CHOOSE ALGORITHM STATES
+		//ALGORITHM LOOP
+
+
 		if (myEngine->KeyHit(Key_Escape))
 		{
 			myEngine->Stop();

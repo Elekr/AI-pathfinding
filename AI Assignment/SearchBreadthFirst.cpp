@@ -2,6 +2,7 @@
 
 #include "SearchBreadthFirst.h"
 #include "Utilities.h"
+#include <sstream>
 
 bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start, unique_ptr<SNode> goal, NodeList &path) //SEND OVER AN ARRAY OF MODELS TO UPDATE WHEN SHIT HAPPENS
 {
@@ -73,73 +74,133 @@ bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start,
 
 bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> start, unique_ptr<SNode> goal, NodeList& path, ModelMap& map, I3DEngine* &myEngine)
 {
-	IFont* myFont = myEngine->LoadFont("Comic Sans MS", 36); //TRYING TO GET FRAME TIME BUT IT AINT WORKIN
-	float frameTime = myEngine->Timer();
-	myFont->Draw("Hello World", 200, 100);
-
-	int maxY = terrain.size() - 1; //used to check that the pointer stays within the vector
-	int maxX = terrain[0].size() - 1;
-
+	//**** TL ENGINE
+	IFont* myFont = myEngine->LoadFont("Comic Sans MS", 36);
+	float timePassed = 0.0f;
+	//**** PATHFINDING
 	NodeList openList;
 	NodeList closedList;
 	unique_ptr<SNode> current(new SNode);
 	SNode* prior = current.get();
 	SNode* path1;
 	openList.push_back(move(start)); //push initial state onto open list
+	int maxY = terrain.size() - 1; //used to check that the pointer stays within the vector
+	int maxX = terrain[0].size() - 1;
 
-	while (!openList.empty()) // until goal state is found or openlist is empty
+
+
+	while (myEngine->IsRunning())
 	{
-		current = move(openList.front()); // pop first element 
-		prior = current.get();
-		openList.pop_front();
+		// Draw the scene
+		myEngine->DrawScene();
 
-		if (terrain[current->y + 1][current->x] != 0 && current->y + 1 < maxY) //North node
+		float frameTime = myEngine->Timer();
+		//**** Output Text
+		stringstream outText;
+		outText << "Frame Time: " << frameTime;
+		myFont->Draw(outText.str(), 0, 0, kBlack);
+		outText.str("");
+		outText << "timePassed " << timePassed;
+		myFont->Draw(outText.str(), 0, 30, kBlack);
+
+		if (!openList.empty()) // until goal state is found or openlist is empty
 		{
-			if (!Search(closedList, current->x, current->y + 1) && !Search(openList, current->x, current->y + 1)) //check that the node isn't already on the open/closed list to stop duplication
+			current = move(openList.front()); // pop first element 
+			prior = current.get();
+			openList.pop_front();
+
+			if (current->y != maxY)
 			{
-				AddNode(openList, current->x, current->y + 1, prior);
+				if (terrain[current->y + 1][current->x] != 0) //North node not a wall and inbounds
+				{
+					if (!Search(closedList, current->x, current->y + 1) && !Search(openList, current->x, current->y + 1)) //check that the node isn't already on the open/closed list to stop duplication
+					{
+						cout << "North node added" << endl;
+						AddNode(openList, current->x, current->y + 1, prior);
+					}
+				}
+			}
+
+			if (current->x != maxX)
+			{
+				if (terrain[current->y][current->x + 1] != 0) //East node
+				{
+					if (!Search(closedList, current->x + 1, current->y) && !Search(openList, current->x + 1, current->y))
+					{
+						cout << "East node added" << endl;
+						AddNode(openList, current->x + 1, current->y, prior);
+					}
+				}
+			}
+
+			if (current->y != 0)
+			{
+				if (terrain[current->y - 1][current->x] != 0 && current->y - 1 >= 0) //South node
+				{
+					if (!Search(closedList, current->x, current->y - 1) && !Search(openList, current->x, current->y - 1))
+					{
+						cout << "South node added" << endl;
+						AddNode(openList, current->x, current->y - 1, prior);
+					}
+				}
+			}
+
+			if (current->x != 0)
+			{
+				if (terrain[current->y][current->x - 1] != 0 && current->x - 1 >= 0) //West node
+				{
+					if (!Search(closedList, current->x - 1, current->y) && !Search(openList, current->x - 1, current->y))
+					{
+						cout << "West node added" << endl;
+						AddNode(openList, current->x - 1, current->y, prior);
+					}
+				}
+			}
+
+			//cout << current->x << " " << current->y << endl;
+
+			if (current->x == goal->x && current->y == goal->y)
+			{
+				path1 = current.get();
+				while (path1 != 0)
+				{
+					AddNode(path, path1->x, path1->y, 0);
+					//cout << path1->x << " " << path1->y << endl;
+					path1 = path1->parent;
+				}
+
+				return true;
 			}
 		}
 
-		if (terrain[current->y][current->x + 1] != 0 && current->x + 1 < maxX) //East node
+		//DRAW THE OPEN AND CLOSED LIST
+		for (auto it = openList.begin(); it != openList.end(); ++it)
 		{
-			if (!Search(closedList, current->x + 1, current->y) && !Search(openList, current->x + 1, current->y))
+			while (timePassed < 1.0f)
 			{
-				AddNode(openList, current->x + 1, current->y, prior);
+				timePassed += myEngine->Timer() * 60;
+				outText << "timePassed " << timePassed;
 			}
+			map[(*it)->y][(*it)->x]->SetSkin("moon.jpg");
+			timePassed = 0.0f;
 		}
-
-		if (terrain[current->y - 1][current->x] != 0 && current->y - 1 > 0) //South node
-		{
-			if (!Search(closedList, current->x, current->y - 1) && !Search(openList, current->x, current->y - 1))
-			{
-				AddNode(openList, current->x, current->y - 1, prior);
-			}
-		}
-
-		if (terrain[current->y][current->x - 1] != 0 && current->x - 1 > 0) //West node
-		{
-			if (!Search(closedList, current->x - 1, current->y) && !Search(openList, current->x - 1, current->y))
-			{
-				AddNode(openList, current->x - 1, current->y, prior);
-			}
-		}
-		//cout << current->x << " " << current->y << endl;
-
-		if (current->x == goal->x && current->y == goal->y)
-		{
-			path1 = current.get();
-			while (path1 != 0)
-			{
-				AddNode(path, path1->x, path1->y, 0);
-				//cout << path1->x << " " << path1->y << endl;
-				path1 = path1->parent;
-			}
-
-			return true;
-		}
-		map[current->x][current->y]->SetSkin(PATH); // SET THE CURRENT SQUARE TO PATH
 		closedList.push_back(move(current));
+		for (auto it = closedList.begin(); it != closedList.end(); ++it)
+		{
+			while (timePassed < 1.0f)
+			{
+				timePassed += myEngine->Timer() * 60;
+				outText << "timePassed " << timePassed;
+			}
+			map[(*it)->y][(*it)->x]->SetSkin("purple.png");
+			timePassed = 0.0f;
+		}
+
 	}
-	return false;
+
+	if (myEngine->KeyHit(Key_Escape))
+	{
+		myEngine->Stop();
+		return 0;
+	}
 }

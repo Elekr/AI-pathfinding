@@ -23,7 +23,7 @@ const string COORDS = "coords.txt";
 const string WATER = "blue.png";
 const string WOOD = "green.png";
 const string CLEAR = "grey.png";
-const string WALL = "black.png";
+const string WALL = "brown.png";
 const string PATH = "red.png";
 
 // Represents a node in the search tree.-

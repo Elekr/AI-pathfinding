@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "Definitions.h" // type definitions
+#include "Definitions.h"
 
 // ISearch interface class - cannot be instantiated
 // Implementation classes for specific search algorithms should inherit from this interface

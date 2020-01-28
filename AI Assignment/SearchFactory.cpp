@@ -4,7 +4,11 @@
 // Factory function implementation to create CSearchXXX objects 
 //
 
+
+#pragma once
+
 #include "SearchBreadthFirst.h"
+#include "SearchAStar.h"
 
 /* TODO - include each implemented search class here */
 
@@ -20,6 +24,10 @@ ISearch* NewSearch(ESearchType search)
 	case BreadthFirst:
 	{
 		return new CSearchBreadthFirst();
+	}
+	case AStar:
+	{
+		return new CSearchAStar();
 	}
 	
 

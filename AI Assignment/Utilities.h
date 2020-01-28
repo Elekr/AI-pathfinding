@@ -4,54 +4,16 @@
 
 using namespace std;
 
-void AddNode(deque<unique_ptr<SNode>>& myList, int xValue, int yValue, SNode* current)
-{
-	unique_ptr <SNode> tmpNode(new SNode);
-	tmpNode->x = xValue;
-	tmpNode->y = yValue;
-	tmpNode->parent = current;
-	myList.push_back(move(tmpNode));
-}
+void AddNode(deque<unique_ptr<SNode>>& myList, int xValue, int yValue, SNode* current);
 
-void Display(deque<unique_ptr<SNode>>& myList)
-{
-	for (auto it = myList.begin(); it != myList.end(); ++it)
-	{
-		cout << (*it)->x << " " << (*it)->y << endl;
-	}
-	cout << endl;
-}
+void Display(deque<unique_ptr<SNode>>& myList);
 
-bool Search(deque<unique_ptr<SNode>>& myList, int xValue, int yValue)
-{
-	for (auto it = myList.begin(); it != myList.end(); ++it)
-	{
-		if (xValue == (*it)->x && yValue == (*it)->y)
-		{
-			return true;
-		}
-	}
-	return false;
+bool Search(deque<unique_ptr<SNode>>& myList, int xValue, int yValue);
 
-}
+void MoveNodes(deque<unique_ptr<SNode>>& myList1, deque<unique_ptr<SNode>>& myList2);
 
-void MoveNodes(deque<unique_ptr<SNode>>& myList1, deque<unique_ptr<SNode>>& myList2)
-{
-	for (auto it = myList1.begin(); it != myList1.end(); ++it)
-	{
-		myList2.push_back(move((*it)));
-	}
-}
+void Raw(SNode* t);
 
-void Raw(SNode* t)
-{
-	cout << "Raw output " << t->x << " " << t->y << endl << endl;
-}
+unique_ptr<SNode> Transfer(unique_ptr <SNode> t);
 
-unique_ptr<SNode> Transfer(unique_ptr <SNode> t)
-{
-	cout << "Node current values " << t->x << " " << t->y << endl;
-	t->x = 1;
-	t->y = 2;
-	return std::move(t); //moves ownership back to the passed node so that it is out of scope
-}
+int CalcDistance(unique_ptr<SNode> &current, unique_ptr<SNode> &goal);

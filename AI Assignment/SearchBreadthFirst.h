@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Search.h"       // Base (=interface) class definition
-#include "Definitions.h"
 
 class CSearchBreadthFirst : public ISearch
 {

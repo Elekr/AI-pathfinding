@@ -1,11 +1,11 @@
 // AI Assignment.cpp: A program using the TL-Engine
-
+#pragma once
 #include <TL-Engine.h>	// TL-Engine include file and namespace
-#include "Definitions.h"
 #include "SearchFactory.h"
 
 using namespace tle;
 
+//TODO: create class to store these
 TerrainMap SetMap(string userChoice, TerrainMap &map)
 {
 	string mapName = userChoice;
@@ -25,9 +25,8 @@ TerrainMap SetMap(string userChoice, TerrainMap &map)
 		infile >> arrayX >> arrayY;
 		vector<ETerrainCost> row;
 		//TODO get the starting and goal node locations 
-		cout << "arrayX: " << arrayX << " arrayY: " << arrayY << endl << endl; //Get the size of the map 
-																	   //TODO 
-		vector<vector<ETerrainCost>>::iterator ptr;
+		cout << "arrayX: " << arrayX << " arrayY: " << arrayY << endl << endl; //Get the size of the map
+
 		for (int i = 0; i < arrayY; i++)
 		{
 			for (int j = 0; j < arrayX; j++)

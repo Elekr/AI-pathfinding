@@ -49,5 +49,4 @@ enum ETerrainCost
 
 // Maps of any size are implemented as 2D vectors
 using TerrainMap = vector<vector<ETerrainCost>>;
-
 using ModelMap = vector<vector<IModel*>>;

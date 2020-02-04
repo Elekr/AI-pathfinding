@@ -3,16 +3,17 @@
 
 #include "Utilities.h"
 
-void AddNode(deque<unique_ptr<SNode>>& myList, int xValue, int yValue, SNode* current)
+void AddNode(NodeList& myList, int xValue, int yValue, SNode* current, int score)
 {
 	unique_ptr <SNode> tmpNode(new SNode);
 	tmpNode->x = xValue;
 	tmpNode->y = yValue;
 	tmpNode->parent = current;
+	tmpNode->score;
 	myList.push_back(move(tmpNode));
 }
 
-void Display(deque<unique_ptr<SNode>>& myList)
+void Display(NodeList& myList)
 {
 	for (auto it = myList.begin(); it != myList.end(); ++it)
 	{
@@ -21,7 +22,7 @@ void Display(deque<unique_ptr<SNode>>& myList)
 	cout << endl;
 }
 
-bool Search(deque<unique_ptr<SNode>>& myList, int xValue, int yValue)
+bool Search(NodeList& myList, int xValue, int yValue)
 {
 	for (auto it = myList.begin(); it != myList.end(); ++it)
 	{
@@ -34,7 +35,7 @@ bool Search(deque<unique_ptr<SNode>>& myList, int xValue, int yValue)
 
 }
 
-void MoveNodes(deque<unique_ptr<SNode>>& myList1, deque<unique_ptr<SNode>>& myList2)
+void MoveNodes(NodeList& myList1, NodeList& myList2)
 {
 	for (auto it = myList1.begin(); it != myList1.end(); ++it)
 	{
@@ -61,4 +62,9 @@ int CalcDistance(unique_ptr<SNode> &current, unique_ptr<SNode> &goal)
 	int dx = abs(goal->x - current->x);
 	int dy = abs(goal->y - current->y);
 	return dx + dy;
+}
+
+void GenerateState(TerrainMap map, NodeList s)
+{
+
 }

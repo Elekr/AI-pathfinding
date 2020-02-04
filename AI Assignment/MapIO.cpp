@@ -1,7 +1,6 @@
 
 #include "MapIO.h"
 
-//TODO: create class to store these
 TerrainMap SetMap(string userChoice, TerrainMap &map)
 {
 	string mapName = userChoice;
@@ -78,9 +77,9 @@ void TLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
 {
 	vector<IModel*> row;
 	IMesh* quadMesh = myEngine->LoadMesh("quad.x"); //Model set up for the tiles in the maze
-	for (int i = 0; i < 10; i++) //TODO change to iterator to support dynamic map size
+	for (int i = 0; i < currentMap.size(); i++) //TODO change to iterator to support dynamic map size
 	{
-		for (int j = 0; j < 10; j++)
+		for (int j = 0; j < currentMap[0].size(); j++)
 		{
 			switch (currentMap[i][j])
 			{
@@ -113,16 +112,24 @@ void DrawPath(ModelMap &tilesMap, NodeList &path)
 	{
 		tilesMap[(*it)->y][(*it)->x]->SetSkin(PATH);
 	}
-	cout << endl;
+}
 
+void OutputPath(NodeList & path)
+{
+	ofstream output ("pathCoords.txt");
+	for (auto it = path.begin(); it != path.end(); ++it) //Outputs the path
+	{
+		output << (*it)->x << " " << (*it)->y << endl;
+	}
+	output.close();
 }
 
 void DisplayVector(TerrainMap currentMap)
 {
 	cout << "Vector output: " << endl;
-	for (int i = 0; i < 10; i++) //Output the enum vector
+	for (int i = 0; i < currentMap.size(); i++) //Output the enum vector
 	{
-		for (int j = 0; j < 10; j++)
+		for (int j = 0; j < currentMap[0].size(); j++)
 		{
 			cout << currentMap[i][j];
 		}

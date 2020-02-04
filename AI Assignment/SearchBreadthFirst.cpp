@@ -26,7 +26,7 @@ bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start,
 		{
 			if (!Search(closedList, current->x, current->y + 1) && !Search(openList, current->x, current->y + 1)) //check that the node isn't already on the open/closed list to stop duplication
 			{
-				AddNode(openList, current->x, current->y + 1, prior);
+				AddNode(openList, current->x, current->y + 1, prior, 0);
 			}
 		}
 
@@ -34,7 +34,7 @@ bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start,
 		{
 			if (!Search(closedList, current->x + 1, current->y) && !Search(openList, current->x + 1, current->y))
 			{
-				AddNode(openList, current->x + 1, current->y, prior);
+				AddNode(openList, current->x + 1, current->y, prior, 0);
 			}
 		}
 
@@ -42,7 +42,7 @@ bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start,
 		{
 			if (!Search(closedList, current->x, current->y - 1) && !Search(openList, current->x, current->y - 1))
 			{
-				AddNode(openList, current->x, current->y - 1, prior);
+				AddNode(openList, current->x, current->y - 1, prior, 0);
 			}
 		}
 
@@ -50,7 +50,7 @@ bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start,
 		{
 			if (!Search(closedList, current->x - 1, current->y) && !Search(openList, current->x - 1, current->y))
 			{
-				AddNode(openList, current->x - 1, current->y, prior);
+				AddNode(openList, current->x - 1, current->y, prior, 0);
 			}
 		}
 		//cout << current->x << " " << current->y << endl;
@@ -60,7 +60,7 @@ bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start,
 			path1 = current.get();
 			while (path1 != 0)
 			{
-				AddNode(path, path1->x, path1->y, 0);
+				AddNode(path, path1->x, path1->y, 0, 0);
 				//cout << path1->x << " " << path1->y << endl;
 				path1 = path1->parent;
 			}
@@ -82,7 +82,7 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 	NodeList closedList;
 	unique_ptr<SNode> current(new SNode);
 	SNode* prior = current.get();
-	SNode* path1;
+	SNode* returnPath;
 	openList.push_back(move(start)); //push initial state onto open list
 	int maxY = terrain.size() - 1; //used to check that the pointer stays within the vector
 	int maxX = terrain[0].size() - 1;
@@ -116,7 +116,7 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 					if (!Search(closedList, current->x, current->y + 1) && !Search(openList, current->x, current->y + 1)) //check that the node isn't already on the open/closed list to stop duplication
 					{
 						cout << "North node added" << endl;
-						AddNode(openList, current->x, current->y + 1, prior);
+						AddNode(openList, current->x, current->y + 1, prior, 0);
 					}
 				}
 			}
@@ -128,7 +128,7 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 					if (!Search(closedList, current->x + 1, current->y) && !Search(openList, current->x + 1, current->y))
 					{
 						cout << "East node added" << endl;
-						AddNode(openList, current->x + 1, current->y, prior);
+						AddNode(openList, current->x + 1, current->y, prior, 0);
 					}
 				}
 			}
@@ -140,7 +140,7 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 					if (!Search(closedList, current->x, current->y - 1) && !Search(openList, current->x, current->y - 1))
 					{
 						cout << "South node added" << endl;
-						AddNode(openList, current->x, current->y - 1, prior);
+						AddNode(openList, current->x, current->y - 1, prior, 0);
 					}
 				}
 			}
@@ -152,7 +152,7 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 					if (!Search(closedList, current->x - 1, current->y) && !Search(openList, current->x - 1, current->y))
 					{
 						cout << "West node added" << endl;
-						AddNode(openList, current->x - 1, current->y, prior);
+						AddNode(openList, current->x - 1, current->y, prior, 0);
 					}
 				}
 			}
@@ -161,12 +161,12 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 
 			if (current->x == goal->x && current->y == goal->y)
 			{
-				path1 = current.get();
-				while (path1 != 0)
+				returnPath = current.get();
+				while (returnPath != 0)
 				{
-					AddNode(path, path1->x, path1->y, 0);
+					AddNode(path, returnPath->x, returnPath->y, 0, 0);
 					//cout << path1->x << " " << path1->y << endl;
-					path1 = path1->parent;
+					returnPath = returnPath->parent;
 				}
 
 				return true;
@@ -174,27 +174,28 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 		}
 
 		//DRAW THE OPEN AND CLOSED LIST
-		for (auto it = openList.begin(); it != openList.end(); ++it)
-		{
-			while (timePassed < 1.0f)
+			for (auto it = openList.begin(); it != openList.end(); ++it)
 			{
-				timePassed += frameTime / 10;
-				outText << "timePassed " << timePassed;
+				while (timePassed < 1.0f)
+				{
+					timePassed += frameTime / 100;
+				}
+				map[(*it)->y][(*it)->x]->SetSkin("yellow.png");
+				timePassed = 0.0f;
 			}
-			map[(*it)->y][(*it)->x]->SetSkin("moon.jpg");
-			timePassed = 0.0f;
-		}
-		closedList.push_back(move(current));
-		for (auto it = closedList.begin(); it != closedList.end(); ++it)
-		{
-			while (timePassed < 1.0f)
+			closedList.push_back(move(current));
+
+			for (auto it = closedList.begin(); it != closedList.end(); ++it)
 			{
-				timePassed += frameTime / 10;
-				outText << "timePassed " << timePassed;
+				while (timePassed < 1.0f)
+				{
+					timePassed += frameTime / 100;
+					outText << "timePassed " << timePassed;
+				}
+
+				map[(*it)->y][(*it)->x]->SetSkin("purple.png");
+				timePassed = 0.0f;
 			}
-			map[(*it)->y][(*it)->x]->SetSkin("purple.png");
-			timePassed = 0.0f;
-		}
 
 	}
 

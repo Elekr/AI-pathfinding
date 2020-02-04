@@ -14,6 +14,8 @@ void main()
 
 	// Add default folder for meshes and other media
 	myEngine->AddMediaFolder( "C:\\ProgramData\\TL-Engine\\Media" );
+	myEngine->AddMediaFolder("D:\\Users\\tcrosby\\Documents\\GitHub\\AI-pathfinding\\AI Assignment");
+
 
 	/**** Set up your scene here ****/
 
@@ -24,19 +26,16 @@ void main()
 	unique_ptr<SNode> goal(new SNode);
 	NodeList path;
 	string userInput = "d";
-	string search;
+	ESearchType searchAlgorithm = BreadthFirst;
+	bool RealTime = false;
 
 	//LOAD
 	SetMap(userInput, currentMap); // USER INPUT FOR SETTING MAP
-	MapCoordinates(userInput, start, goal); // MAKE PART OF SET MAP?
+	MapCoordinates(userInput, start, goal);
 	DisplayVector(currentMap);
 
 	//SEARCH FUNCTION
-	ISearch* PathFinder = NewSearch(BreadthFirst);
-
-	//bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path); // NOT REAL TIME
-
-	//DisplayPath(path);
+	ISearch* PathFinder = NewSearch(searchAlgorithm);
 
 	//**** TL ENGINE ****//
 
@@ -46,9 +45,7 @@ void main()
 	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -150
 	TLMap(myEngine, currentMap, tilesMap);
 
-	//PATHFINDING AND DRAWING PATH
 	bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
-	DrawPath(tilesMap, path);
 
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())
@@ -58,9 +55,16 @@ void main()
 
 		/**** Update your scene each frame here ****/
 		//CHOOSE MAP
-		//CHOOSE ALGORITHM STATES
+		//CHOOSE ALGORITHM STATE
 		//ALGORITHM LOOP
 
+		//PATHFINDING AND DRAWING PATH
+		if (success == true)
+		{
+			DrawPath(tilesMap, path);
+			OutputPath(path);
+		}
+		success = false;
 
 		if (myEngine->KeyHit(Key_Escape))
 		{

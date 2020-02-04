@@ -4,16 +4,18 @@
 
 using namespace std;
 
-void AddNode(deque<unique_ptr<SNode>>& myList, int xValue, int yValue, SNode* current);
+void AddNode(NodeList& myList, int xValue, int yValue, SNode* current, int score);
 
-void Display(deque<unique_ptr<SNode>>& myList);
+void Display(NodeList& myList);
 
-bool Search(deque<unique_ptr<SNode>>& myList, int xValue, int yValue);
+bool Search(NodeList& myList, int xValue, int yValue);
 
-void MoveNodes(deque<unique_ptr<SNode>>& myList1, deque<unique_ptr<SNode>>& myList2);
+void MoveNodes(NodeList& myList1, NodeList& myList2);
 
 void Raw(SNode* t);
 
 unique_ptr<SNode> Transfer(unique_ptr <SNode> t);
 
 int CalcDistance(unique_ptr<SNode> &current, unique_ptr<SNode> &goal);
+
+void GenerateState(TerrainMap map, NodeList s);

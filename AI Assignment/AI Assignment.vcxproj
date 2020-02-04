@@ -126,6 +126,7 @@ copy "C:\ProgramData\TL-Engine\3rd Party\TL-Xtreme\shader\*.*" "$(OutDir)" &gt; 
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI Assignment.cpp" />
+    <ClCompile Include="MapIO.cpp" />
     <ClCompile Include="SearchAStar.cpp" />
     <ClCompile Include="SearchBreadthFirst.cpp" />
     <ClCompile Include="SearchFactory.cpp" />
@@ -135,6 +136,7 @@ copy "C:\ProgramData\TL-Engine\3rd Party\TL-Xtreme\shader\*.*" "$(OutDir)" &gt; 
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MapIO.h" />
     <ClInclude Include="SearchAStar.h" />
     <ClInclude Include="SearchBreadthFirst.h" />
     <ClInclude Include="Definitions.h" />

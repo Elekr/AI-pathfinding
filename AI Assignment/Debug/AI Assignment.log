@@ -1,2 +1,3 @@
 ﻿  SearchAStar.cpp
-LINK : fatal error LNK1168: cannot open D:\Users\tcrosby\Documents\GitHub\AI-pathfinding\AI Assignment\AI AssignmentDebug.exe for writing
+  AI Assignment.vcxproj -> D:\Users\tcrosby\Documents\GitHub\AI-pathfinding\AI Assignment\\AI AssignmentDebug.exe
+  AI Assignment.vcxproj -> D:\Users\tcrosby\Documents\GitHub\AI-pathfinding\AI Assignment\\AI Assignment.pdb (Full PDB)

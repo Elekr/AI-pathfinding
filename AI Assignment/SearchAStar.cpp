@@ -82,7 +82,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			else
 			{
 				AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal));
-				cout << "New node created at " << n->x << " " << n->y << "Score: " << newCost + CalcDistance(n, goal) << endl;
+				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal) << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 			timesSorted++;
@@ -126,7 +126,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			else
 			{
 				AddNode(openList, n->x, n->y, prior, newCost + CalcDistance(n, goal));
-				cout << "New node created at " << n->x << " " << n->y << endl;
+				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal) << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 		}
@@ -169,7 +169,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			else
 			{
 				AddNode(openList, n->x, n->y, prior, newCost + CalcDistance(n, goal));
-				cout << "New node created at " << n->x << " " << n->y << endl;
+				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal) << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 		}
@@ -179,7 +179,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 		{
 			//i
 			//Apply the rule to generate a new state and call it N
-			n->x = current->x + 1;
+			n->x = current->x - 1;
 			n->y = current->y;
 
 			//ii
@@ -212,7 +212,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			else
 			{
 				AddNode(openList, n->x, n->y, prior, newCost + CalcDistance(n, goal)); //if n was not on the open or closedList then push n to openList
-				cout << "New node created at " << n->x << " " << n->y << endl;
+				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal) << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 		}

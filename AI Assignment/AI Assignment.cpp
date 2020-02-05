@@ -47,7 +47,7 @@ void main()
 
 	//bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
 	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
-
+	
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())
 	{

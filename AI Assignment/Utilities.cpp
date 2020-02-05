@@ -48,12 +48,31 @@ void Raw(SNode* t)
 	cout << "Raw output " << t->x << " " << t->y << endl << endl;
 }
 
-unique_ptr<SNode> Transfer(unique_ptr <SNode> t)
+unique_ptr<SNode> Transfer(unique_ptr<SNode> &n, NodeList &openList, NodeList &closedList)
 {
-	cout << "Node current values " << t->x << " " << t->y << endl;
-	t->x = 1;
-	t->y = 2;
-	return std::move(t); //moves ownership back to the passed node so that it is out of scope
+
+	for (auto it = openList.begin(); it != openList.end(); ++it)
+	{
+		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
+		{
+			if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
+			{
+				return std::move(*it);
+			}
+		}
+	}
+
+	for (auto it = closedList.begin(); it != closedList.end(); ++it)
+	{
+		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
+		{
+			if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
+			{
+				return std::move(*it);
+			}
+		}
+	}
+
 }
 
 int CalcDistance(unique_ptr<SNode> &current, unique_ptr<SNode> &goal)
@@ -64,7 +83,40 @@ int CalcDistance(unique_ptr<SNode> &current, unique_ptr<SNode> &goal)
 	return dx + dy;
 }
 
-void GenerateState(TerrainMap map, NodeList s)
+void SortList(NodeList list)
 {
 
+}
+
+bool getNScore(unique_ptr<SNode> &n, NodeList &openList, NodeList &closedList)
+{
+	for (auto it = openList.begin(); it != openList.end(); ++it)
+	{
+		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
+		{
+			if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
+			{
+				return true;
+			}
+			else // continue
+			{
+				false;
+			}
+		}
+	}
+
+	for (auto it = closedList.begin(); it != closedList.end(); ++it)
+	{
+		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
+		{
+			if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
+			{
+				return true;
+			}
+			else // continue
+			{
+				return false;
+			}
+		}
+	}
 }

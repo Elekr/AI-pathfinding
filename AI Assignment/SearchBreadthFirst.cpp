@@ -4,6 +4,8 @@
 #include "Utilities.h"
 #include <sstream>
 
+
+
 bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start, unique_ptr<SNode> goal, NodeList &path) //SEND OVER AN ARRAY OF MODELS TO UPDATE WHEN SHIT HAPPENS
 {
 	int maxY = terrain.size() - 1; //used to check that the pointer stays within the vector
@@ -105,7 +107,23 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 
 		if (!openList.empty()) // until goal state is found or openlist is empty
 		{
+
+
 			current = move(openList.front()); // pop first element 
+
+			if (current->x == goal->x && current->y == goal->y)
+			{
+				returnPath = current.get();
+				while (returnPath != 0)
+				{
+					AddNode(path, returnPath->x, returnPath->y, 0, 0);
+					//cout << path1->x << " " << path1->y << endl;
+					returnPath = returnPath->parent;
+				}
+
+				return true;
+			}
+
 			prior = current.get();
 			openList.pop_front();
 
@@ -159,24 +177,14 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 
 			//cout << current->x << " " << current->y << endl;
 
-			if (current->x == goal->x && current->y == goal->y)
-			{
-				returnPath = current.get();
-				while (returnPath != 0)
-				{
-					AddNode(path, returnPath->x, returnPath->y, 0, 0);
-					//cout << path1->x << " " << path1->y << endl;
-					returnPath = returnPath->parent;
-				}
 
-				return true;
-			}
 		}
 
+		
 		//DRAW THE OPEN AND CLOSED LIST
 			for (auto it = openList.begin(); it != openList.end(); ++it)
 			{
-				while (timePassed < 1.0f)
+				while (timePassed < 2.0f)
 				{
 					timePassed += frameTime / 100;
 				}
@@ -187,7 +195,7 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 
 			for (auto it = closedList.begin(); it != closedList.end(); ++it)
 			{
-				while (timePassed < 1.0f)
+				while (timePassed < 2.0f)
 				{
 					timePassed += frameTime / 100;
 					outText << "timePassed " << timePassed;

@@ -21,6 +21,7 @@ bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start,
 	while (!openList.empty()) // until goal state is found or openlist is empty
 	{
 		current = move(openList.front()); // pop first element 
+		openList.pop_front();
 		prior = current.get();
 		openList.pop_front();
 

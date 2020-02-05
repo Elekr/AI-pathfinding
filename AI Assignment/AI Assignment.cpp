@@ -26,7 +26,7 @@ void main()
 	unique_ptr<SNode> goal(new SNode);
 	NodeList path;
 	string userInput = "d";
-	ESearchType searchAlgorithm = BreadthFirst;
+	ESearchType searchAlgorithm = AStar;
 	bool RealTime = false;
 
 	//LOAD
@@ -45,7 +45,8 @@ void main()
 	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -150
 	TLMap(myEngine, currentMap, tilesMap);
 
-	bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
+	//bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
+	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
 
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())

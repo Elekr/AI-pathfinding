@@ -18,11 +18,10 @@ unique_ptr<SNode> Transfer(unique_ptr<SNode> &n, NodeList &openList, NodeList &c
 
 int CalcDistance(unique_ptr<SNode> &current, unique_ptr<SNode> &goal);
 
-void SortList(NodeList list);
-
 bool getNScore(unique_ptr<SNode> &n, NodeList &openList, NodeList &closedList);
 
-//SNode SetN()
-//{
-//	return false;
-//}
+void RemoveN(unique_ptr<SNode> &n, NodeList &closedList);
+
+void SortList(NodeList &openList);
+
+bool CompareScore(unique_ptr<SNode> &node1, unique_ptr<SNode> &node2);

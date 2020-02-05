@@ -9,7 +9,7 @@ void AddNode(NodeList& myList, int xValue, int yValue, SNode* current, int score
 	tmpNode->x = xValue;
 	tmpNode->y = yValue;
 	tmpNode->parent = current;
-	tmpNode->score;
+	tmpNode->score = score;
 	myList.push_back(move(tmpNode));
 }
 
@@ -24,13 +24,17 @@ void Display(NodeList& myList)
 
 bool Search(NodeList& myList, int xValue, int yValue)
 {
-	for (auto it = myList.begin(); it != myList.end(); ++it)
+	if (!myList.empty())
 	{
-		if (xValue == (*it)->x && yValue == (*it)->y)
+		for (auto it = myList.begin(); it != myList.end(); ++it)
 		{
-			return true;
+			if (xValue == (*it)->x && yValue == (*it)->y)
+			{
+				return true;
+			}
 		}
 	}
+
 	return false;
 
 }
@@ -83,11 +87,6 @@ int CalcDistance(unique_ptr<SNode> &current, unique_ptr<SNode> &goal)
 	return dx + dy;
 }
 
-void SortList(NodeList list)
-{
-
-}
-
 bool getNScore(unique_ptr<SNode> &n, NodeList &openList, NodeList &closedList)
 {
 	for (auto it = openList.begin(); it != openList.end(); ++it)
@@ -119,4 +118,26 @@ bool getNScore(unique_ptr<SNode> &n, NodeList &openList, NodeList &closedList)
 			}
 		}
 	}
+}
+
+void RemoveN(unique_ptr<SNode> &n, NodeList &closedList)
+{
+	for (auto it = closedList.begin(); it != closedList.end(); ++it)
+	{
+		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
+		{
+			closedList.erase(it); // Remove it
+		}
+	}
+}
+
+void SortList(NodeList &openList)
+{
+	//sorty stuff
+	std::sort(openList.begin(), openList.end(), CompareScore);
+}
+
+bool CompareScore(unique_ptr<SNode> &node1, unique_ptr<SNode> &node2)
+{
+	return node1->score < node2->score;
 }

@@ -1,3 +1,4 @@
-﻿  SearchAStar.cpp
-  AI Assignment.vcxproj -> D:\Users\tcrosby\Documents\GitHub\AI-pathfinding\AI Assignment\\AI AssignmentDebug.exe
-  AI Assignment.vcxproj -> D:\Users\tcrosby\Documents\GitHub\AI-pathfinding\AI Assignment\\AI Assignment.pdb (Full PDB)
+﻿cl : Command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  SearchAStar.cpp
+  AI Assignment.vcxproj -> C:\Users\Tom\Documents\GitHub\AI-pathfinding\AI Assignment\\AI AssignmentDebug.exe
+  Copying DLLs & shaders...

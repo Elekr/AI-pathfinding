@@ -38,6 +38,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			while (returnPath != 0)
 			{
 				AddNode(path, returnPath->x, returnPath->y, 0, returnPath->score);
+				cout << "Path: " << returnPath->x << " " << returnPath->y << endl;
 				returnPath = returnPath->parent;
 			}
 
@@ -51,6 +52,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			//Apply the rule to generate a new state and call it N
 			n->x = current->x;
 			n->y = current->y + 1;
+			n->parent = current.get();
 
 			//ii
 			//current cost = score - heuristic value;
@@ -82,7 +84,8 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			else
 			{
 				AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal));
-				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal) << endl;
+				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal);
+				cout << "parent coords: " << n->parent->x << " " << n->parent->y << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 			timesSorted++;
@@ -95,6 +98,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			//Apply the rule to generate a new state and call it N
 			n->x = current->x + 1;
 			n->y = current->y;
+			n->parent = current.get();
 
 			//ii
 			//current cost = score - heuristic value;
@@ -125,8 +129,9 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			}
 			else
 			{
-				AddNode(openList, n->x, n->y, prior, newCost + CalcDistance(n, goal));
-				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal) << endl;
+				AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal));
+				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal);
+				cout << "parent coords: " << n->parent->x << " " << n->parent->y << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 		}
@@ -138,6 +143,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			//Apply the rule to generate a new state and call it N
 			n->x = current->x;
 			n->y = current->y - 1;
+			n->parent = current.get();
 
 			//ii
 			//current cost = score - heuristic value;
@@ -168,8 +174,9 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			}
 			else
 			{
-				AddNode(openList, n->x, n->y, prior, newCost + CalcDistance(n, goal));
-				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal) << endl;
+				AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal));
+				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal);
+				cout << "parent coords: " << n->parent->x << " " << n->parent->y << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 		}
@@ -181,6 +188,7 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			//Apply the rule to generate a new state and call it N
 			n->x = current->x - 1;
 			n->y = current->y;
+			n->parent = current.get();
 
 			//ii
 			//current cost = score - heuristic value;
@@ -211,8 +219,9 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			}
 			else
 			{
-				AddNode(openList, n->x, n->y, prior, newCost + CalcDistance(n, goal)); //if n was not on the open or closedList then push n to openList
-				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal) << endl;
+				AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal)); //if n was not on the open or closedList then push n to openList
+				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal);
+				cout << "parent coords: " << n->parent->x << " " << n->parent->y << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 		}

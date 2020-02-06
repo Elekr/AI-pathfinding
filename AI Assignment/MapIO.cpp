@@ -20,8 +20,6 @@ TerrainMap SetMap(string userChoice, TerrainMap &map)
 		char currentChar;
 		infile >> arrayX >> arrayY;
 		vector<ETerrainCost> row;
-		//TODO get the starting and goal node locations 
-		cout << "arrayX: " << arrayX << " arrayY: " << arrayY << endl << endl; //Get the size of the map
 
 		for (int i = 0; i < arrayY; i++)
 		{
@@ -116,8 +114,8 @@ void DrawPath(ModelMap &tilesMap, NodeList &path)
 
 void OutputPath(NodeList & path)
 {
-	ofstream output ("pathCoords.txt");
-	for (auto it = path.begin(); it != path.end(); ++it) //Outputs the path
+	ofstream output ("output.txt");
+	for (auto it = path.rbegin(); it != path.rend(); ++it) //Outputs the path
 	{
 		output << (*it)->x << " " << (*it)->y << endl;
 	}
@@ -142,7 +140,7 @@ void DisplayVector(TerrainMap currentMap)
 void DisplayPath(NodeList &path)
 {
 	cout << "Path output: " << endl;
-	for (auto it = path.begin(); it != path.end(); ++it) //Outputs the path
+	for (auto it = path.rbegin(); it != path.rend(); ++it) //Outputs the path
 	{
 		cout << (*it)->y << " " << (*it)->x << endl;
 	}

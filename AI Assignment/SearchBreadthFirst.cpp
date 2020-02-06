@@ -8,8 +8,8 @@
 
 bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start, unique_ptr<SNode> goal, NodeList &path) //SEND OVER AN ARRAY OF MODELS TO UPDATE WHEN SHIT HAPPENS
 {
-	int maxY = terrain.size() - 1; //used to check that the pointer stays within the vector
-	int maxX = terrain[0].size() - 1;
+	int maxY = terrain.size(); //used to check that the pointer stays within the vector
+	int maxX = terrain[0].size();
 
 	NodeList openList;
 	NodeList closedList;
@@ -23,7 +23,6 @@ bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start,
 		current = move(openList.front()); // pop first element 
 		openList.pop_front();
 		prior = current.get();
-		openList.pop_front();
 
 		if (terrain[current->y + 1][current->x] != 0 && current->y + 1 < maxY) //North node CHECK IF NULL BECAUSE OUT OF BOUNDS OF THE VECTOR WOULD BE NULL IF THERE'S NO WALLS function
 		{
@@ -111,6 +110,7 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 
 
 			current = move(openList.front()); // pop first element 
+			openList.pop_front();
 
 			if (current->x == goal->x && current->y == goal->y)
 			{
@@ -126,7 +126,6 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 			}
 
 			prior = current.get();
-			openList.pop_front();
 
 			if (current->y != maxY)
 			{

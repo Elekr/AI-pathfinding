@@ -47,6 +47,17 @@ enum ETerrainCost
   Wall  = 0
 };
 
+enum EInputState
+{
+	Menu = 0,
+	ChooseMap = 1,
+	ChooseAlgorithm = 2,
+	RealTime = 3,
+	ShowPath = 4,
+	PathError = 5
+	
+};
+
 // Maps of any size are implemented as 2D vectors
 using TerrainMap = vector<vector<ETerrainCost>>;
 using ModelMap = vector<vector<IModel*>>;

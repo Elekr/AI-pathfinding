@@ -59,10 +59,7 @@ unique_ptr<SNode> Transfer(unique_ptr<SNode> &n, NodeList &openList, NodeList &c
 	{
 		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
 		{
-			if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
-			{
-				return std::move(*it);
-			}
+			return std::move(*it);
 		}
 	}
 
@@ -70,10 +67,7 @@ unique_ptr<SNode> Transfer(unique_ptr<SNode> &n, NodeList &openList, NodeList &c
 	{
 		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
 		{
-			if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
-			{
-				return std::move(*it);
-			}
+			return std::move(*it);
 		}
 	}
 
@@ -93,14 +87,16 @@ bool getNScore(unique_ptr<SNode> &n, NodeList &openList, NodeList &closedList)
 	{
 		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
 		{
-			if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
-			{
-				return true;
-			}
-			else // continue
-			{
-				false;
-			}
+			//if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
+			//{
+			//	return true;
+			//}
+			//else // continue
+			//{
+			//	false;
+			//}
+
+			return (n->score >= (*it)->score);
 		}
 	}
 
@@ -108,14 +104,15 @@ bool getNScore(unique_ptr<SNode> &n, NodeList &openList, NodeList &closedList)
 	{
 		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
 		{
-			if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
-			{
-				return true;
-			}
-			else // continue
-			{
-				return false;
-			}
+			//if (n->score >= (*it)->score) // if the the newcost  >= existing_n cost
+			//{
+			//	return true;
+			//}
+			//else // continue
+			//{
+			//	return false;
+			//}
+			return (n->score >= (*it)->score);
 		}
 	}
 }

@@ -19,20 +19,19 @@ void main()
 
 	/**** Set up your scene here ****/
 
+	EInputState currentState;
 	//**** PATHFINDING ****//
 	//SETUP
 	TerrainMap currentMap;
 	unique_ptr<SNode> start(new SNode);
 	unique_ptr<SNode> goal(new SNode);
 	NodeList path;
-	string userInput = "d";
-	ESearchType searchAlgorithm = AStar;
-	bool RealTime = false;
+	int userInput = Menu;
 
-	//LOAD
-	SetMap(userInput, currentMap); // USER INPUT FOR SETTING MAP
-	MapCoordinates(userInput, start, goal);
-	DisplayVector(currentMap);
+	string userMap = "d";
+
+	ESearchType searchAlgorithm = AStar;
+	bool bRealTime = false;
 
 	//SEARCH FUNCTION
 	ISearch* PathFinder = NewSearch(searchAlgorithm);
@@ -42,11 +41,15 @@ void main()
 	
 	ModelMap tilesMap;
 	ICamera* myCamera;
+	SetMap(userMap, currentMap); // USER INPUT FOR SETTING MAP
+	MapCoordinates(userMap, start, goal);
 	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -150
 	TLMap(myEngine, currentMap, tilesMap);
 
+
 	//bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
 	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
+	//bool success = false;
 	
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())
@@ -55,17 +58,50 @@ void main()
 		myEngine->DrawScene();
 
 		/**** Update your scene each frame here ****/
+		//switch(userInput)
+		//{
+		//case Menu:
+		//	cout << "Current Map: " << userMap << " Current Algorithm: " << searchAlgorithm << " RealTime " << bRealTime << endl;
+		//	cout << "Select Option" << endl;
+		//	cout << "(1) Choose Map" << endl;
+		//	cout << "(2) Choose Algorithm" << endl;
+		//	cout << "(3) Real Time" << endl;
+		//	cin >> userInput;
+		//	break;
+		//case ChooseMap:
+		//	cout << "Choose Map" << endl;
+
+		//	cin >> userMap;
+		//	SetMap(userMap, currentMap); // USER INPUT FOR SETTING MAP
+		//	MapCoordinates(userMap, start, goal);
+		//	currentState = Menu;
+		//	break;
+		//case ChooseAlgorithm:
+		//	cout << "Choose Algorithm" << endl;
+		//	break;
+		//case ShowPath:
+		//	break;
+		//case PathError:
+		//	break;
+		//case RealTime:
+		//	break;
+
+		//}
 		//CHOOSE MAP
 		//CHOOSE ALGORITHM STATE
 		//ALGORITHM LOOP
 
 		//PATHFINDING AND DRAWING PATH
-		if (success == true)
+		if (success == true) //change to work with states
 		{
 			DrawPath(tilesMap, path);
 			OutputPath(path);
 		}
-		success = false;
+		//else
+		//{
+
+		//}
+		//success = false;
 
 		if (myEngine->KeyHit(Key_Escape))
 		{

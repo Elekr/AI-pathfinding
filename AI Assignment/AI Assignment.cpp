@@ -30,7 +30,7 @@ void main()
 
 	string userMap = "d";
 
-	ESearchType searchAlgorithm = AStar;
+	ESearchType searchAlgorithm = BreadthFirst;
 	bool bRealTime = false;
 
 	//SEARCH FUNCTION
@@ -47,8 +47,8 @@ void main()
 	TLMap(myEngine, currentMap, tilesMap);
 
 
-	//bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
-	bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
+	bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
+	//bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
 	//bool success = false;
 	
 	// The main game loop, repeat until engine is stopped

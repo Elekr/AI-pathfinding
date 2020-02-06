@@ -184,9 +184,10 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 		//DRAW THE OPEN AND CLOSED LIST
 			for (auto it = openList.begin(); it != openList.end(); ++it)
 			{
-				while (timePassed < 2.0f)
+				
+				while (timePassed < 1.0f)
 				{
-					timePassed += frameTime / 100;
+					timePassed += myEngine->Timer() * 10;
 				}
 				map[(*it)->y][(*it)->x]->SetSkin("yellow.png");
 				timePassed = 0.0f;
@@ -195,10 +196,9 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 
 			for (auto it = closedList.begin(); it != closedList.end(); ++it)
 			{
-				while (timePassed < 2.0f)
+				while (timePassed < 1.0f)
 				{
-					timePassed += frameTime / 100;
-					outText << "timePassed " << timePassed;
+					timePassed += myEngine->Timer() * 10;
 				}
 
 				map[(*it)->y][(*it)->x]->SetSkin("purple.png");

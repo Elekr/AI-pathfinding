@@ -5,7 +5,6 @@ TerrainMap SetMap(string userChoice, TerrainMap &map)
 {
 	string mapName = userChoice;
 	mapName.append(MAP);
-	cout << "map file name: " << mapName << endl; //set the file names for the fstream to open
 
 	fstream infile;
 	infile.open(mapName); //Opens the file 
@@ -56,7 +55,6 @@ void MapCoordinates(string userChoice, unique_ptr<SNode>& start, unique_ptr<SNod
 {
 	string mapName = userChoice;
 	mapName.append(COORDS);
-	cout << "coords file name: " << mapName << endl << endl; //set the file names for the fstream to open
 
 	fstream infile;
 	infile.open(mapName); //Opens the file 
@@ -71,7 +69,7 @@ void MapCoordinates(string userChoice, unique_ptr<SNode>& start, unique_ptr<SNod
 	infile.close();
 }
 
-void TLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
+void InitTLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
 {
 	vector<IModel*> row;
 	IMesh* quadMesh = myEngine->LoadMesh("quad.x"); //Model set up for the tiles in the maze
@@ -83,7 +81,7 @@ void TLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
 			{
 			case(Wall):
 				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
-				row[j]->SetSkin(WALL);
+				row[j]->SetSkin(CLEAR);
 				break;
 			case(Clear):
 				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
@@ -91,16 +89,41 @@ void TLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
 				break;
 			case(Water):
 				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
-				row[j]->SetSkin(WATER);
+				row[j]->SetSkin(CLEAR);
 				break;
 			case(Wood):
 				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
-				row[j]->SetSkin(WOOD);
+				row[j]->SetSkin(CLEAR);
 				break;
 			}
 		}
 		tilesMap.push_back(row);
 		row.clear();
+	}
+}
+
+void DrawTLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
+{
+	for (int i = 0; i < currentMap.size(); i++) //TODO change to iterator to support dynamic map size
+	{
+		for (int j = 0; j < currentMap[0].size(); j++)
+		{
+			switch (currentMap[i][j])
+			{
+			case(Wall):
+				tilesMap[i][j]->SetSkin(WALL);
+				break;
+			case(Clear):
+				tilesMap[i][j]->SetSkin(CLEAR);
+				break;
+			case(Water):
+				tilesMap[i][j]->SetSkin(WATER);
+				break;
+			case(Wood):
+				tilesMap[i][j]->SetSkin(WOOD);
+				break;
+			}
+		}
 	}
 }
 

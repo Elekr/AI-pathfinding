@@ -54,12 +54,14 @@ void Raw(SNode* t)
 
 unique_ptr<SNode> Transfer(unique_ptr<SNode> &n, NodeList &openList, NodeList &closedList)
 {
-
+	unique_ptr<SNode> tmp(new SNode);
 	for (auto it = openList.begin(); it != openList.end(); ++it)
 	{
 		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
 		{
-			return std::move(*it);
+			tmp = move((*it));
+			openList.erase(it);
+			return tmp;
 		}
 	}
 
@@ -67,7 +69,9 @@ unique_ptr<SNode> Transfer(unique_ptr<SNode> &n, NodeList &openList, NodeList &c
 	{
 		if (n->x == (*it)->x && n->y == (*it)->y) // if it's on the list
 		{
-			return std::move(*it);
+			tmp = move((*it));
+			closedList.erase(it);
+			return tmp;
 		}
 	}
 

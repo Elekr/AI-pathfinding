@@ -27,28 +27,27 @@ void main()
 	unique_ptr<SNode> goal(new SNode);
 	NodeList path;
 	int userInput = Menu;
+	int userChoice = 1;
+	string userMap = "m";
 
-	string userMap = "d";
 
 	ESearchType searchAlgorithm = BreadthFirst;
 	bool bRealTime = false;
+	bool success;
 
 	//SEARCH FUNCTION
-	ISearch* PathFinder = NewSearch(searchAlgorithm);
+	ISearch* PathFinder;
 
 	//**** TL ENGINE ****//
 
 	
 	ModelMap tilesMap;
 	ICamera* myCamera;
+	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -150
 	SetMap(userMap, currentMap); // USER INPUT FOR SETTING MAP
 	MapCoordinates(userMap, start, goal);
-	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -150
-	TLMap(myEngine, currentMap, tilesMap);
-
-
-	bool success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
-	//bool success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
+	InitTLMap(myEngine, currentMap, tilesMap);
+	
 	//bool success = false;
 	
 	// The main game loop, repeat until engine is stopped
@@ -58,54 +57,83 @@ void main()
 		myEngine->DrawScene();
 
 		/**** Update your scene each frame here ****/
-		//switch(userInput)
-		//{
-		//case Menu:
-		//	cout << "Current Map: " << userMap << " Current Algorithm: " << searchAlgorithm << " RealTime " << bRealTime << endl;
-		//	cout << "Select Option" << endl;
-		//	cout << "(1) Choose Map" << endl;
-		//	cout << "(2) Choose Algorithm" << endl;
-		//	cout << "(3) Real Time" << endl;
-		//	cin >> userInput;
-		//	break;
-		//case ChooseMap:
-		//	cout << "Choose Map" << endl;
-
-		//	cin >> userMap;
-		//	SetMap(userMap, currentMap); // USER INPUT FOR SETTING MAP
-		//	MapCoordinates(userMap, start, goal);
-		//	currentState = Menu;
-		//	break;
-		//case ChooseAlgorithm:
-		//	cout << "Choose Algorithm" << endl;
-		//	break;
-		//case ShowPath:
-		//	break;
-		//case PathError:
-		//	break;
-		//case RealTime:
-		//	break;
-
-		//}
-		//CHOOSE MAP
-		//CHOOSE ALGORITHM STATE
-		//ALGORITHM LOOP
-
-		//PATHFINDING AND DRAWING PATH
-		if (success == true) //change to work with states
+		switch(userInput)
 		{
-			DrawPath(tilesMap, path);
-			OutputPath(path);
-		}
-		//else
-		//{
+		case Menu:
+			cout << "Current Map: " << userMap << " Current Algorithm: " << searchAlgorithm << " RealTime " << bRealTime << endl;
+			cout << "Select Option" << endl;
+			cout << "(1) Choose Map" << endl;
+			cout << "(2) Choose Algorithm" << endl;
+			cout << "(3) Real Time" << endl;
+			cout << "(4) Draw Path" << endl;
+			cout << "(5) Exit" << endl;
+			cin >> userInput;
+			break;
+		case ChooseMap:
+			cout << "Choose Map" << endl;
+			currentMap.clear();
+			cin >> userMap;
+			SetMap(userMap, currentMap); // USER INPUT FOR SETTING MAP
+			DrawTLMap(myEngine, currentMap, tilesMap);
+			userInput = Menu;
+			break;
+		case ChooseAlgorithm:
+			cout << "Choose Algorithm (1: BreadthFirst / 2: AStar)" << endl;
+			cin >> userChoice;
+			if (userChoice == 1)
+			{
+				searchAlgorithm = BreadthFirst;
+			}
+			if (userChoice == 2)
+			{
+				searchAlgorithm = AStar;
+			}
+			userInput = Menu;
+			break;
+		case RealTime:
+			cout << "Show Algorithm in real time (1: Yes/ 2: no)" << endl;
+			cin >> userChoice;
+			if (userChoice == 1)
+			{
+				bRealTime = true;
+			}
+			if (userChoice == 2)
+			{
+				bRealTime = false;
+			}
+			userInput = Menu;
+			break;
+		case ShowPath:
+			start.reset(new SNode);
+			goal.reset(new SNode);
+			MapCoordinates(userMap, start, goal);
+			DrawTLMap(myEngine, currentMap, tilesMap);
+			PathFinder = NewSearch(searchAlgorithm);
+			if (bRealTime)
+			{
+				success = PathFinder->FindPathRT(currentMap, move(start), move(goal), path, tilesMap, myEngine);
+			}
+			else
+			{
+				success = PathFinder->FindPath(currentMap, move(start), move(goal), path);
+			}
+			
+			if (success == true) //change to work with states
+			{
+				DrawPath(tilesMap, path);
+				OutputPath(path);
+			}
+			else
+			{
+				cout << "Path not found " << endl;
 
-		//}
-		//success = false;
+			}
 
-		if (myEngine->KeyHit(Key_Escape))
-		{
+			userInput = Menu;
+			break;
+		case Exit:
 			myEngine->Stop();
+			break;
 		}
 	}
 

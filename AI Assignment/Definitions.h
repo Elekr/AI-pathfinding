@@ -54,7 +54,7 @@ enum EInputState
 	ChooseAlgorithm = 2,
 	RealTime = 3,
 	ShowPath = 4,
-	PathError = 5
+	Exit = 5
 	
 };
 

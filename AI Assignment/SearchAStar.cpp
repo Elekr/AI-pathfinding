@@ -29,7 +29,6 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 		
 		//pop the first element from the open list and call it current
 		current = move(openList.front()); 
-		cout << "current X: " << current->x << " current y: " << current->y << endl;
 		openList.pop_front();
 
 		if (current->x == goal->x && current->y == goal->y) //
@@ -38,7 +37,6 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 			while (returnPath != 0)
 			{
 				AddNode(path, returnPath->x, returnPath->y, 0, returnPath->score);
-				cout << "Path: " << returnPath->x << " " << returnPath->y << endl; // remove this
 				returnPath = returnPath->parent;
 			}
 
@@ -68,24 +66,22 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 					//v
 					if (Search(openList, n->x, n->y) || Search(closedList, n->x, n->y)) //If N is on the open or closedList current = n
 					{
-						//n = move(Transfer(n, openList, closedList)); // let n now refer to existing_n
-						//n->parent = current.get(); //Set the parent of n to current
-						//n->score = newCost + CalcDistance(n, goal); //Set the score of n to the newcost + heuristic value (calculating the accumulated cost through score so don't need to set the cost)
+						Transfer(n, openList, closedList);
+						n->parent = current.get(); //Set the parent of n to current
+						n->score = newCost + CalcDistance(n, goal); //Set the score of n to the newcost + heuristic value (calculating the accumulated cost through score so don't need to set the cost)
 
-						////vi
-						//if (Search(closedList, n->x, n->y)) // If n was on the closedList then remove it from the closedList and push to open
-						//{
-						//	RemoveN(n, closedList); //if n was on the closedList then remove it
-						//	AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal)); //push N to the openList
-						//}
+						//vi
+						if (Search(closedList, n->x, n->y)) // If n was on the closedList then remove it from the closedList and push to open
+						{
+							RemoveN(n, closedList); //if n was on the closedList then remove it
+							AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal)); //push N to the openList
+						}
 					}
 				}
 			}
 			else
 			{
 				AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal));
-				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal);
-				cout << " parent coords: " << n->parent->x << " " << n->parent->y << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 			timesSorted++;
@@ -114,24 +110,21 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 					//v
 					if (Search(openList, n->x, n->y) || Search(closedList, n->x, n->y)) //If N is on the open or closedList current = n
 					{
-						//n = move(Transfer(n, openList, closedList)); // let n now refer to existing_n
-						//n->parent = current.get(); //Set the parent of n to current
-						//n->score = newCost + CalcDistance(n, goal); //Set the score of n to the newcost + heuristic value (calculating the accumulated cost through score so don't need to set the cost)
-
-						//											//vi
-						//if (Search(closedList, n->x, n->y)) // If n was on the closedList then remove it from the closedList and push to open
-						//{
-						//	RemoveN(n, closedList); //if n was on the closedList then remove it
-						//	AddNode(openList, n->x, n->y, n->parent, n->score); //push N to the openList
-						//}
+						Transfer(n, openList, closedList);
+						n->parent = current.get(); //Set the parent of n to current
+						n->score = newCost + CalcDistance(n, goal); //Set the score of n to the newcost + heuristic value (calculating the accumulated cost through score so don't need to set the cost)
+																	//vi
+						if (Search(closedList, n->x, n->y)) // If n was on the closedList then remove it from the closedList and push to open
+						{
+							RemoveN(n, closedList); //if n was on the closedList then remove it
+							AddNode(openList, n->x, n->y, n->parent, n->score); //push N to the openList
+						}
 					}
 				}
 			}
 			else
 			{
 				AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal));
-				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal);
-				cout << " parent coords: " << n->parent->x << " " << n->parent->y << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 		}
@@ -159,24 +152,22 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 					//v
 					if (Search(openList, n->x, n->y) || Search(closedList, n->x, n->y)) //If N is on the open or closedList current = n
 					{
-						//n = move(Transfer(n, openList, closedList)); // let n now refer to existing_n
-						//n->parent = current.get(); //Set the parent of n to current
-						//n->score = newCost + CalcDistance(n, goal); //Set the score of n to the newcost + heuristic value (calculating the accumulated cost through score so don't need to set the cost)
+						Transfer(n, openList, closedList);
+						n->parent = current.get(); //Set the parent of n to current
+						n->score = newCost + CalcDistance(n, goal); //Set the score of n to the newcost + heuristic value (calculating the accumulated cost through score so don't need to set the cost)
 
-						//											//vi
-						//if (Search(closedList, n->x, n->y)) // If n was on the closedList then remove it from the closedList and push to open
-						//{
-						//	RemoveN(n, closedList); //if n was on the closedList then remove it
-						//	AddNode(openList, n->x, n->y, n->parent, n->score); //push N to the openList
-						//}
+																	//vi
+						if (Search(closedList, n->x, n->y)) // If n was on the closedList then remove it from the closedList and push to open
+						{
+							RemoveN(n, closedList); //if n was on the closedList then remove it
+							AddNode(openList, n->x, n->y, n->parent, n->score); //push N to the openList
+						}
 					}
 				}
 			}
 			else
 			{
 				AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal));
-				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal);
-				cout << " parent coords: " << n->parent->x << " " << n->parent->y << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 		}
@@ -204,24 +195,22 @@ bool CSearchAStar::FindPath(TerrainMap& terrain, unique_ptr<SNode> start, unique
 					//v
 					if (Search(openList, n->x, n->y) || Search(closedList, n->x, n->y)) //If N is on the open or closedList current = n
 					{
-						//n = move(Transfer(n, openList, closedList)); // let n now refer to existing_n
-						//n->parent = current.get(); //Set the parent of n to current
-						//n->score = newCost + CalcDistance(n, goal); //Set the score of n to the newcost + heuristic value (calculating the accumulated cost through score so don't need to set the cost)
+						Transfer(n, openList, closedList);
+						n->parent = current.get(); //Set the parent of n to current
+						n->score = newCost + CalcDistance(n, goal); //Set the score of n to the newcost + heuristic value (calculating the accumulated cost through score so don't need to set the cost)
 
-						//											//vi
-						//if (Search(closedList, n->x, n->y)) // If n was on the closedList then remove it from the closedList and push to open
-						//{
-						//	RemoveN(n, closedList); //if n was on the closedList then remove it
-						//	AddNode(openList, n->x, n->y, n->parent, n->score); //push N to the openList
-						//}
+																	//vi
+						if (Search(closedList, n->x, n->y)) // If n was on the closedList then remove it from the closedList and push to open
+						{
+							RemoveN(n, closedList); //if n was on the closedList then remove it
+							AddNode(openList, n->x, n->y, n->parent, n->score); //push N to the openList
+						}
 					}
 				}
 			}
 			else
 			{
 				AddNode(openList, n->x, n->y, n->parent, newCost + CalcDistance(n, goal)); //if n was not on the open or closedList then push n to openList
-				cout << "New node created at " << n->x << " " << n->y << " Score: " << newCost + CalcDistance(n, goal);
-				cout << " parent coords: " << n->parent->x << " " << n->parent->y << endl;
 			}
 			SortList(openList); //Reorder the openList by score (sort function)
 		}

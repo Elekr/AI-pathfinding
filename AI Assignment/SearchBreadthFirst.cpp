@@ -8,8 +8,8 @@
 
 bool CSearchBreadthFirst::FindPath(TerrainMap &terrain, unique_ptr<SNode> start, unique_ptr<SNode> goal, NodeList &path) //SEND OVER AN ARRAY OF MODELS TO UPDATE WHEN SHIT HAPPENS
 {
-	int maxY = terrain.size(); //used to check that the pointer stays within the vector
-	int maxX = terrain[0].size();
+	int maxY = terrain.size() - 1; //used to check that the pointer stays within the vector
+	int maxX = terrain[0].size() - 1;
 
 	NodeList openList;
 	NodeList closedList;
@@ -174,10 +174,6 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 					}
 				}
 			}
-
-			//cout << current->x << " " << current->y << endl;
-
-
 		}
 
 		
@@ -185,9 +181,9 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 			for (auto it = openList.begin(); it != openList.end(); ++it)
 			{
 				
-				while (timePassed < 1.0f)
+				while (timePassed < 0.5f)
 				{
-					timePassed += myEngine->Timer() * 10;
+					timePassed += myEngine->Timer() * 100;
 				}
 				map[(*it)->y][(*it)->x]->SetSkin("yellow.png");
 				timePassed = 0.0f;
@@ -196,9 +192,9 @@ bool CSearchBreadthFirst::FindPathRT(TerrainMap& terrain, unique_ptr<SNode> star
 
 			for (auto it = closedList.begin(); it != closedList.end(); ++it)
 			{
-				while (timePassed < 1.0f)
+				while (timePassed < 0.5f)
 				{
-					timePassed += myEngine->Timer() * 10;
+					timePassed += myEngine->Timer() * 100;
 				}
 
 				map[(*it)->y][(*it)->x]->SetSkin("purple.png");

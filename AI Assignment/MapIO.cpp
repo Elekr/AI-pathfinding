@@ -53,6 +53,8 @@ TerrainMap SetMap(string userChoice, TerrainMap &map)
 
 void MapCoordinates(string userChoice, unique_ptr<SNode>& start, unique_ptr<SNode>& goal)
 {
+	unique_ptr<SNode> tmp1(new SNode);
+	unique_ptr<SNode> tmp2(new SNode);
 	string mapName = userChoice;
 	mapName.append(COORDS);
 
@@ -64,7 +66,9 @@ void MapCoordinates(string userChoice, unique_ptr<SNode>& start, unique_ptr<SNod
 	}
 	else
 	{
-		infile >> start->x >> start->y >> goal->x >> goal->y;
+		infile >> tmp1->x >> tmp1->y >> tmp2->x >> tmp2->y;
+		start = move(tmp1);
+		goal = move(tmp2);
 	}
 	infile.close();
 }
@@ -104,7 +108,7 @@ void InitTLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
 
 void DrawTLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
 {
-	for (int i = 0; i < currentMap.size(); i++) //TODO change to iterator to support dynamic map size
+	for (int i = 0; i < currentMap.size(); i++)
 	{
 		for (int j = 0; j < currentMap[0].size(); j++)
 		{
@@ -168,4 +172,17 @@ void DisplayPath(NodeList &path)
 		cout << (*it)->y << " " << (*it)->x << endl;
 	}
 	cout << endl;
+}
+
+void ResetMap(ModelMap &tilesMap, unique_ptr<SNode> &start, unique_ptr<SNode> &goal)
+{
+	goal.reset();
+	start.reset();
+	for (int i = 0; i < tilesMap.size(); i++)
+	{
+		for (int j = 0; j < tilesMap[i].size(); j++)
+		{
+			//figure out how to delete the model
+		}
+	}
 }

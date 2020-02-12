@@ -19,36 +19,31 @@ void main()
 
 	/**** Set up your scene here ****/
 
+
+	// MENU 
 	EInputState currentState;
-	//**** PATHFINDING ****//
-	//SETUP
-	TerrainMap currentMap;
-	unique_ptr<SNode> start(new SNode);
-	unique_ptr<SNode> goal(new SNode);
-	NodeList path;
+	bool bRealTime = false;
+	bool success;
 	int userInput = Menu;
 	int userChoice = 1;
 	string userMap = "m";
 
-
+	//**** PATHFINDING ****//
+	// ALGORITHM
 	ESearchType searchAlgorithm = BreadthFirst;
-	bool bRealTime = false;
-	bool success;
-
-	//SEARCH FUNCTION
 	ISearch* PathFinder;
+	TerrainMap currentMap;
+	ModelMap tilesMap;
+	unique_ptr<SNode> start(new SNode);
+	unique_ptr<SNode> goal(new SNode);
+	NodeList path;
 
 	//**** TL ENGINE ****//
-
-	
-	ModelMap tilesMap;
 	ICamera* myCamera;
-	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); //half of max X, half of max Y, -150
-	SetMap(userMap, currentMap); // USER INPUT FOR SETTING MAP
+	myCamera = myEngine->CreateCamera(kManual, 50, 50, -150); 
+
+	SetMap(userMap, currentMap); 
 	MapCoordinates(userMap, start, goal);
-	InitTLMap(myEngine, currentMap, tilesMap);
-	
-	//bool success = false;
 	
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())
@@ -73,7 +68,7 @@ void main()
 			cout << "Choose Map" << endl;
 			currentMap.clear();
 			cin >> userMap;
-			SetMap(userMap, currentMap); // USER INPUT FOR SETTING MAP
+			SetMap(userMap, currentMap);
 			DrawTLMap(myEngine, currentMap, tilesMap);
 			userInput = Menu;
 			break;
@@ -104,9 +99,9 @@ void main()
 			userInput = Menu;
 			break;
 		case ShowPath:
-			start.reset(new SNode);
-			goal.reset(new SNode);
+			ResetMap(tilesMap, start, goal);
 			MapCoordinates(userMap, start, goal);
+			InitTLMap(myEngine, currentMap, tilesMap);
 			DrawTLMap(myEngine, currentMap, tilesMap);
 			PathFinder = NewSearch(searchAlgorithm);
 			if (bRealTime)

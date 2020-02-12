@@ -69,7 +69,6 @@ void main()
 			currentMap.clear();
 			cin >> userMap;
 			SetMap(userMap, currentMap);
-			DrawTLMap(myEngine, currentMap, tilesMap);
 			userInput = Menu;
 			break;
 		case ChooseAlgorithm:

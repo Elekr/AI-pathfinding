@@ -81,25 +81,8 @@ void InitTLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap)
 	{
 		for (int j = 0; j < currentMap[0].size(); j++)
 		{
-			switch (currentMap[i][j])
-			{
-			case(Wall):
-				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
-				row[j]->SetSkin(CLEAR);
-				break;
-			case(Clear):
-				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
-				row[j]->SetSkin(CLEAR);
-				break;
-			case(Water):
-				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
-				row[j]->SetSkin(CLEAR);
-				break;
-			case(Wood):
-				row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
-				row[j]->SetSkin(CLEAR);
-				break;
-			}
+			row.push_back(quadMesh->CreateModel(j * 10, i * 10, 0));
+			row[j]->SetSkin(CLEAR);
 		}
 		tilesMap.push_back(row);
 		row.clear();
@@ -178,11 +161,13 @@ void ResetMap(ModelMap &tilesMap, unique_ptr<SNode> &start, unique_ptr<SNode> &g
 {
 	goal.reset();
 	start.reset();
-	for (int i = 0; i < tilesMap.size(); i++)
-	{
-		for (int j = 0; j < tilesMap[i].size(); j++)
-		{
-			//figure out how to delete the model
-		}
-	}
+	//for (int i = 0; i < tilesMap.size(); i++)
+	//{
+	//	for (int j = 0; j < tilesMap[i].size(); j++)
+	//	{
+	//		tilesMap[i][j]->GetMesh()->RemoveModel(tilesMap[i][j]);
+	//		tilesMap.clear();
+	//	}
+	//}
+	tilesMap.clear();
 }

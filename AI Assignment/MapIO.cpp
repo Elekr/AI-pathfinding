@@ -157,17 +157,10 @@ void DisplayPath(NodeList &path)
 	cout << endl;
 }
 
-void ResetMap(ModelMap &tilesMap, unique_ptr<SNode> &start, unique_ptr<SNode> &goal)
+void ResetMap(ModelMap &tilesMap, unique_ptr<SNode> &start, unique_ptr<SNode> &goal, NodeList &path)
 {
 	goal.reset();
 	start.reset();
-	//for (int i = 0; i < tilesMap.size(); i++)
-	//{
-	//	for (int j = 0; j < tilesMap[i].size(); j++)
-	//	{
-	//		tilesMap[i][j]->GetMesh()->RemoveModel(tilesMap[i][j]);
-	//		tilesMap.clear();
-	//	}
-	//}
+	path.clear();
 	tilesMap.clear();
 }

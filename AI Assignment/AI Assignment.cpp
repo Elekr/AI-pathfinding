@@ -16,7 +16,6 @@ void main()
 	myEngine->AddMediaFolder( "C:\\ProgramData\\TL-Engine\\Media" );
 	myEngine->AddMediaFolder("D:\\Users\\tcrosby\\Documents\\GitHub\\AI-pathfinding\\AI Assignment");
 
-
 	/**** Set up your scene here ****/
 
 
@@ -98,7 +97,7 @@ void main()
 			userInput = Menu;
 			break;
 		case ShowPath:
-			ResetMap(tilesMap, start, goal);
+			ResetMap(tilesMap, start, goal, path);
 			MapCoordinates(userMap, start, goal);
 			InitTLMap(myEngine, currentMap, tilesMap);
 			DrawTLMap(myEngine, currentMap, tilesMap);
@@ -116,6 +115,7 @@ void main()
 			{
 				DrawPath(tilesMap, path);
 				OutputPath(path);
+
 			}
 			else
 			{

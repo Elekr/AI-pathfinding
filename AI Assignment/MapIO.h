@@ -21,4 +21,4 @@ void DisplayVector(TerrainMap currentMap);
 
 void DisplayPath(NodeList &path);
 
-void ResetMap(ModelMap &tilesMap, unique_ptr<SNode> &start, unique_ptr<SNode> &goal);
+void ResetMap(ModelMap &tilesMap, unique_ptr<SNode> &start, unique_ptr<SNode> &goal, NodeList &path);

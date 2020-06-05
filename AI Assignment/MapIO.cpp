@@ -122,9 +122,9 @@ void DrawPath(ModelMap &tilesMap, NodeList &path)
 	}
 }
 
-void OutputPath(NodeList & path)
+void OutputPath(NodeList & path, string userMap)
 {
-	ofstream output ("output.txt");
+	ofstream output (userMap + "output.txt");
 	for (auto it = path.rbegin(); it != path.rend(); ++it) //Outputs the path
 	{
 		output << (*it)->x << " " << (*it)->y << endl;

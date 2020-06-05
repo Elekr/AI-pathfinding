@@ -19,7 +19,7 @@ void main()
 	/**** Set up your scene here ****/
 
 
-	// MENU 
+	//**** MENU 
 	EInputState currentState;
 	bool bRealTime = false;
 	bool success;
@@ -114,7 +114,7 @@ void main()
 			if (success == true) //change to work with states
 			{
 				DrawPath(tilesMap, path);
-				OutputPath(path);
+				OutputPath(path, userMap);
 
 			}
 			else

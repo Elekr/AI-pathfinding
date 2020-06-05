@@ -15,7 +15,7 @@ void DrawTLMap(I3DEngine* &myEngine, TerrainMap currentMap, ModelMap &tilesMap);
 
 void DrawPath(ModelMap &tilesMap, NodeList &path);
 
-void OutputPath(NodeList & path);
+void OutputPath(NodeList & path, string userMap);
 
 void DisplayVector(TerrainMap currentMap);
 
